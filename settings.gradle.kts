@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "RPGHero"
+rootProject.name = "rpghero"
 include(":app")
