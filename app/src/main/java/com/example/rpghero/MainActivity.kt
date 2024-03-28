@@ -6,7 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.Center
@@ -19,6 +22,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,7 +42,11 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Arrangement.Horizontal
+import androidx.compose.material.icons.filled.Dangerous
+import androidx.compose.material.icons.filled.Person2
+import androidx.compose.material.icons.filled.Person4
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 
 class MainActivity : AppCompatActivity() {
 
@@ -156,40 +166,65 @@ fun File (name : String)
 fun sharePopup()
 {
     Column (
-        modifier = Modifier.width(150.dp)
+        modifier = Modifier
+            .width(158.dp)
+            .background(Color.Gray)
+            .border(BorderStroke(1.dp, Color.DarkGray))
     ){
         TextButton (
             onClick = { /*TODO*/ },
             modifier = Modifier
                 .fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
-            contentPadding = PaddingValues(0.dp),
+            contentPadding = PaddingValues(4.dp),
 
         ) {
             Icon(
-                Icons.Filled.MoreHoriz,
-                contentDescription = null)
+                Icons.Filled.Person,
+                contentDescription = null,
+                modifier = Modifier.padding(end = 4.dp)
+            )
             Text("Share to a player", fontSize = 14.sp)
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
         }
-        Button (
+        TextButton (
             onClick = { /*TODO*/ },
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            contentPadding = PaddingValues(4.dp),
         ) {
             Icon(
-                Icons.Filled.MoreHoriz,
-                contentDescription = null)
+                Icons.Filled.Send,
+                contentDescription = null,
+                modifier = Modifier.padding(end = 4.dp)
+            )
             Text("Share to all players", fontSize = 14.sp)
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
         }
-        Button (
+        TextButton (
             onClick = { /*TODO*/ },
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            contentPadding = PaddingValues(4.dp),
         ) {
             Icon(
-                Icons.Filled.MoreHoriz,
-                contentDescription = null)
+                Icons.Filled.Delete,
+                contentDescription = null,
+                modifier = Modifier.padding(end = 4.dp)
+            )
             Text("Delete", fontSize = 14.sp)
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
         }
     }
 }
