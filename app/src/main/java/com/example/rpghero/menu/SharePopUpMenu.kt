@@ -29,10 +29,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.runtime.*
+import androidx.compose.ui.layout.VerticalAlignmentLine
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupPositionProvider
 import com.example.rpghero.R
+import java.net.CacheRequest
 
 @Preview
 @Composable
@@ -77,6 +85,8 @@ fun FilesGrid (files : Array<String>)
 @Composable
 fun File (name : String)
 {
+    val isPopUpOpen = remember { mutableStateOf(false) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -94,7 +104,10 @@ fun File (name : String)
                     .weight(1f)
             )
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick =
+                {
+                    isPopUpOpen.value = !isPopUpOpen.value
+                },
                 modifier = Modifier.size(24.dp)
             ) {
                 Icon(
@@ -104,11 +117,15 @@ fun File (name : String)
             }
         }
     }
+    if (isPopUpOpen.value)
+    {
+        SharePopup(onClose = { isPopUpOpen.value = false })
+    }
 }
 
-@Preview
+//@Preview
 @Composable
-fun SharePopup()
+fun SharePopup(onClose: ()->Unit)
 {
     Column (
         modifier = Modifier
