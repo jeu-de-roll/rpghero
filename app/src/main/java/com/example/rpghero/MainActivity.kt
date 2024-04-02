@@ -42,9 +42,7 @@ fun MainNavigation() {
             OpenScreen()
         }
         composable("JoinScreen") {
-            JoinScreen(
-                navigateToPlayerSelectionScreen = { navController.navigate("HomeScreen") }
-            )
+            JoinScreen()
         }
         composable("CreateScreen") {
             CreateScreen()
@@ -70,8 +68,8 @@ fun OpenScreen() {
 }
 
 @Composable
-fun JoinScreen(navigateToPlayerSelectionScreen: () -> Unit) {
-    JoinMenu(navigateToPlayerSelectionScreen)
+fun JoinScreen() {
+    JoinMenu()
 }
 
 @Composable
