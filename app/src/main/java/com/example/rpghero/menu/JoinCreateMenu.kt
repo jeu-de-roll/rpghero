@@ -16,12 +16,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun NamedTextField (name : String)
+fun NamedTextField (name : String, visualTransformation: VisualTransformation)
 {
     var text by remember { mutableStateOf("") }
 
@@ -41,7 +43,10 @@ fun NamedTextField (name : String)
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             value = text,
-            onValueChange = { text = it })
+            onValueChange = { text = it },
+            visualTransformation = visualTransformation
+        )
+
     }
 }
 
@@ -52,9 +57,9 @@ fun JoinMenu()
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.Center
     ){
-        NamedTextField(name = "Name")
+        NamedTextField(name = "Name", VisualTransformation.None)
         Spacer(modifier = Modifier.height(16.dp))
-        NamedTextField(name = "Password")
+        NamedTextField(name = "Password", PasswordVisualTransformation())
         Spacer(modifier = Modifier.height(32.dp))
         Button(
             onClick = {  },
@@ -77,9 +82,9 @@ fun CreateMenu()
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.Center
     ){
-        NamedTextField(name = "Name")
+        NamedTextField(name = "Name", VisualTransformation.None)
         Spacer(modifier = Modifier.height(16.dp))
-        NamedTextField(name = "Password")
+        NamedTextField(name = "Password", PasswordVisualTransformation())
         Spacer(modifier = Modifier.height(32.dp))
         Button(
             onClick = {  },
