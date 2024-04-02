@@ -37,7 +37,7 @@ fun SessionButton(sessionName : String) {
 }
 
 @Composable
-fun SessionList(sessions : Array<String>) {
+fun SessionListMenu(sessions : Array<String>) {
     LazyColumn {
         items(sessions) { session ->
             Spacer(modifier = Modifier.height(8.dp))
@@ -66,5 +66,5 @@ fun PreviewSessionList() {
         "Chronique 13",
         "Chronique 14"
     )
-    SessionList(sessions = sessions)
+    SessionListMenu(sessions = sessions)
 }

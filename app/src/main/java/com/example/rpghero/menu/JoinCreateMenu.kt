@@ -46,7 +46,7 @@ fun NamedTextField (name : String)
 }
 
 @Composable
-fun JoinScreen()
+fun JoinMenu()
 {
     Column (
         modifier = Modifier.fillMaxHeight(),
@@ -71,7 +71,7 @@ fun JoinScreen()
 }
 
 @Composable
-fun CreateScreen()
+fun CreateMenu()
 {
     Column (
         modifier = Modifier.fillMaxHeight(),
@@ -98,11 +98,11 @@ fun CreateScreen()
 @Preview
 @Composable
 fun PreviewJoin() {
-    JoinScreen()
+    JoinMenu()
 }
 
 @Preview
 @Composable
 fun PreviewCreate() {
-    CreateScreen()
+    CreateMenu()
 }

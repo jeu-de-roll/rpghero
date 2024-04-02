@@ -2,6 +2,7 @@ package com.example.rpghero.menu
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -20,14 +21,15 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import androidx.navigation.compose.rememberNavController
 
-@Preview
 @Composable
-fun TopBarMenu(
-) {
+fun TopBarMenu(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val buttonWidth = screenWidth / 4
+
+    val navController = rememberNavController()
 
     Row(
         modifier = Modifier
@@ -35,20 +37,23 @@ fun TopBarMenu(
         horizontalArrangement = Arrangement.SpaceEvenly,
     )
     {
-        OpenBox(modifier = Modifier.size(buttonWidth))
-        JoinBox(modifier = Modifier.size(buttonWidth))
-        CreateBox(modifier = Modifier.size(buttonWidth))
+        OpenBox(modifier = Modifier.size(buttonWidth), navigateToOpenScreen = navigateToOpenScreen)
+        JoinBox(modifier = Modifier.size(buttonWidth), navigateToJoinScreen = navigateToJoinScreen)
+        CreateBox(modifier = Modifier.size(buttonWidth), navigateToCreateScreen = navigateToCreateScreen)
         SettingsBox(modifier = Modifier.size(buttonWidth))
     }
 }
 
 @Composable
-private fun OpenBox(modifier: Modifier)
+private fun OpenBox(modifier: Modifier, navigateToOpenScreen: () -> Unit)
 {
     Box(
         modifier = modifier
             .background(color = Color(0xFFBDBDBD))
-            .border(width = 1.dp, color = Color.Black),
+            .border(width = 1.dp, color = Color.Black)
+            .clickable {
+                navigateToOpenScreen();
+            }
     ) {
         Text(
             modifier = Modifier
@@ -60,12 +65,15 @@ private fun OpenBox(modifier: Modifier)
 }
 
 @Composable
-private fun JoinBox(modifier: Modifier)
+private fun JoinBox(modifier: Modifier, navigateToJoinScreen: () -> Unit)
 {
     Box(
         modifier = modifier
             .background(color = Color(0xFFBDBDBD))
-            .border(width = 1.dp, color = Color.Black),
+            .border(width = 1.dp, color = Color.Black)
+            .clickable {
+                navigateToJoinScreen()
+            }
     ) {
         Text(
             modifier = Modifier
@@ -77,17 +85,20 @@ private fun JoinBox(modifier: Modifier)
 }
 
 @Composable
-private fun CreateBox(modifier: Modifier)
+private fun CreateBox(modifier: Modifier, navigateToCreateScreen: () -> Unit)
 {
     Box(
         modifier = modifier
             .background(color = Color(0xFFBDBDBD))
-            .border(width = 1.dp, color = Color.Black),
+            .border(width = 1.dp, color = Color.Black)
+            .clickable {
+                navigateToCreateScreen()
+            }
     ) {
         Text(
             modifier = Modifier
                 .align(Alignment.Center),
-            text = "JOIN",
+            text = "CREATE",
             style = MaterialTheme.typography.headlineSmall,
         )
     }
@@ -102,7 +113,10 @@ private fun SettingsBox(modifier: Modifier) {
     Box(
         modifier = modifier
             .background(color = Color(0xFFBDBDBD))
-            .border(width = 1.dp, color = Color.Black),
+            .border(width = 1.dp, color = Color.Black)
+            .clickable {
+
+            }
     ) {
         Icon(
             Icons.Rounded.Settings,
