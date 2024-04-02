@@ -56,7 +56,7 @@ fun NamedTextField (name : String, visualTransformation: VisualTransformation)
 }
 
 @Composable
-fun JoinMenu(navigateToPlayerSelectionScreen: () -> Unit)
+fun JoinMenu()
 {
     Column (
         modifier = Modifier.fillMaxHeight(),
@@ -68,7 +68,7 @@ fun JoinMenu(navigateToPlayerSelectionScreen: () -> Unit)
         Spacer(modifier = Modifier.height(32.dp))
         Button(
             onClick = {
-                navigateToPlayerSelectionScreen()
+
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -107,54 +107,6 @@ fun CreateMenu()
     }
 }
 
-@Composable
-fun PlayerMenu(existingPlayers : Array<String>)
-{
-    Column (
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(vertical = 32.dp),
-        verticalArrangement = Arrangement.Center
-    ){
-        NamedTextField(name = "Pseudo", VisualTransformation.None)
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = {  },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp)
-        ) {
-            Text(
-                text = "JOIN AS NEW PLAYER",
-                fontSize = 26.sp
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Choose an existing player",
-            fontSize = 15.sp,
-            style = TextStyle(textDecoration = TextDecoration.Underline),
-            modifier = Modifier.padding(horizontal = 32.dp)
-        )
-        LazyColumn (
-            modifier = Modifier
-                .padding(horizontal = 48.dp)
-        ){
-            items(existingPlayers) { player ->
-                Spacer(
-                    modifier = Modifier.height(8.dp)
-                )
-                Text(
-                    text = player,
-                    modifier = Modifier.clickable {
-
-                    }
-                )
-            }
-        }
-    }
-}
-
 @Preview
 @Composable
 fun PreviewJoin() {
@@ -165,23 +117,4 @@ fun PreviewJoin() {
 @Composable
 fun PreviewCreate() {
     CreateMenu()
-}
-
-@Preview
-@Composable
-fun PreviewPlayer() {
-    val testPlayers = arrayOf(
-        "Existing player 1",
-        "Existing player 2",
-        "Existing player 3",
-        "Existing player 4",
-        "Existing player 5",
-        "Existing player 6",
-        "Existing player 7",
-        "Existing player 8",
-        "Existing player 9",
-        "Existing player 10",
-    )
-
-    PlayerMenu(existingPlayers = testPlayers)
 }
