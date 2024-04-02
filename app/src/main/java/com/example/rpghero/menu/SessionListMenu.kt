@@ -2,6 +2,7 @@ package com.example.rpghero.menu
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,7 +39,12 @@ fun SessionButton(sessionName : String) {
 
 @Composable
 fun SessionListMenu(sessions : Array<String>) {
-    LazyColumn {
+    LazyColumn (
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(vertical = 32.dp)
+    )
+    {
         items(sessions) { session ->
             Spacer(modifier = Modifier.height(8.dp))
             SessionButton(sessionName = session)
