@@ -17,109 +17,70 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun TopBarMenu(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit) {
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-    val buttonWidth = screenWidth / 4
-
-    val navController = rememberNavController()
-
+fun TopBarMenu(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
     )
     {
-        OpenBox(modifier = Modifier.size(buttonWidth), navigateToOpenScreen = navigateToOpenScreen)
-        JoinBox(modifier = Modifier.size(buttonWidth), navigateToJoinScreen = navigateToJoinScreen)
-        CreateBox(modifier = Modifier.size(buttonWidth), navigateToCreateScreen = navigateToCreateScreen)
-        SettingsBox(modifier = Modifier.size(buttonWidth))
+        TextButtonBox(text = "OPEN", onClickEvent = navigateToOpenScreen)
+        TextButtonBox(text = "JOIN", onClickEvent = navigateToJoinScreen)
+        TextButtonBox(text = "CREATE", onClickEvent = navigateToCreateScreen)
+        IconButtonBox(icon = Icons.Rounded.Settings, onClickEvent = navigateToParamScreen)
     }
 }
 
 @Composable
-private fun OpenBox(modifier: Modifier, navigateToOpenScreen: () -> Unit)
+fun TextButtonBox(text : String, onClickEvent: () -> Unit)
 {
-    Box(
-        modifier = modifier
-            .background(color = Color(0xFFBDBDBD))
-            .border(width = 1.dp, color = Color.Black)
-            .clickable {
-                navigateToOpenScreen();
-            }
-    ) {
-        Text(
-            modifier = Modifier
-                .align(Alignment.Center),
-            text = "OPEN",
-            style = MaterialTheme.typography.headlineSmall,
-        )
-    }
-}
-
-@Composable
-private fun JoinBox(modifier: Modifier, navigateToJoinScreen: () -> Unit)
-{
-    Box(
-        modifier = modifier
-            .background(color = Color(0xFFBDBDBD))
-            .border(width = 1.dp, color = Color.Black)
-            .clickable {
-                navigateToJoinScreen()
-            }
-    ) {
-        Text(
-            modifier = Modifier
-                .align(Alignment.Center),
-            text = "JOIN",
-            style = MaterialTheme.typography.headlineSmall,
-        )
-    }
-}
-
-@Composable
-private fun CreateBox(modifier: Modifier, navigateToCreateScreen: () -> Unit)
-{
-    Box(
-        modifier = modifier
-            .background(color = Color(0xFFBDBDBD))
-            .border(width = 1.dp, color = Color.Black)
-            .clickable {
-                navigateToCreateScreen()
-            }
-    ) {
-        Text(
-            modifier = Modifier
-                .align(Alignment.Center),
-            text = "CREATE",
-            style = MaterialTheme.typography.headlineSmall,
-        )
-    }
-}
-
-@Composable
-private fun SettingsBox(modifier: Modifier) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val buttonWidth = screenWidth / 4
 
     Box(
-        modifier = modifier
+        modifier = Modifier
+            .size(buttonWidth)
             .background(color = Color(0xFFBDBDBD))
             .border(width = 1.dp, color = Color.Black)
             .clickable {
+                onClickEvent();
+            }
+    ) {
+        Text(
+            modifier = Modifier
+                .align(Alignment.Center),
+            text = text,
+            style = MaterialTheme.typography.headlineSmall,
+        )
+    }
+}
 
+@Composable
+fun IconButtonBox(icon : ImageVector, onClickEvent: () -> Unit)
+{
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val buttonWidth = screenWidth / 4
+
+    Box(
+        modifier = Modifier
+            .size(buttonWidth)
+            .background(color = Color(0xFFBDBDBD))
+            .border(width = 1.dp, color = Color.Black)
+            .clickable {
+                onClickEvent();
             }
     ) {
         Icon(
-            Icons.Rounded.Settings,
+            icon,
             contentDescription = "",
             modifier = Modifier
                 .align(Alignment.Center)

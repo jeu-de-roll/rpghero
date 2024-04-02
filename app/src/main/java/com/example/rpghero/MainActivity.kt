@@ -14,6 +14,7 @@ import com.example.rpghero.menu.DiceMenu
 import com.example.rpghero.menu.JoinMenu
 import com.example.rpghero.menu.CreateMenu
 import com.example.rpghero.menu.SessionListMenu
+import com.example.rpghero.menu.ParamsMenu
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +37,8 @@ fun MainNavigation() {
             HomeScreen(
                 navigateToOpenScreen = { navController.navigate("OpenScreen") },
                 navigateToJoinScreen = { navController.navigate("JoinScreen") },
-                navigateToCreateScreen = { navController.navigate("CreateScreen") })
+                navigateToCreateScreen = { navController.navigate("CreateScreen") },
+                navigateToParamScreen = { navController.navigate("ParamScreen") })
         }
         composable("OpenScreen") {
             OpenScreen()
@@ -47,13 +49,20 @@ fun MainNavigation() {
         composable("CreateScreen") {
             CreateScreen()
         }
+        composable("ParamScreen") {
+            ParamsScreen(
+                navigateToOpenScreen = { navController.navigate("OpenScreen") },
+                navigateToJoinScreen = { navController.navigate("JoinScreen") },
+                navigateToCreateScreen = { navController.navigate("CreateScreen") }
+            )
+        }
     }
 }
 
 @Composable
-fun HomeScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit) {
+fun HomeScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
     Column {
-        TopBarMenu(navigateToOpenScreen, navigateToJoinScreen, navigateToCreateScreen)
+        TopBarMenu(navigateToOpenScreen, navigateToJoinScreen, navigateToCreateScreen, navigateToParamScreen)
         DiceMenu()
     }
 }
@@ -75,4 +84,18 @@ fun JoinScreen() {
 @Composable
 fun CreateScreen() {
     CreateMenu()
+}
+
+@Composable
+fun ParamsScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit)
+{
+    Column() {
+        TopBarMenu(
+            navigateToOpenScreen = navigateToOpenScreen,
+            navigateToJoinScreen = navigateToJoinScreen,
+            navigateToCreateScreen = navigateToCreateScreen,
+            navigateToParamScreen = { /*Nothing here, we dont want to travel to the params form the params*/ }
+        )
+        ParamsMenu()
+    }
 }
