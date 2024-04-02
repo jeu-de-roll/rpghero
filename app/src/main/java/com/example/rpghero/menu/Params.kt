@@ -8,14 +8,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import com.example.rpghero.menu.NamedTextField
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 
 @Preview
 @Composable
 fun ParamsMenu()
 {
-    var connected by remember { mutableStateOf(true) }
+    var connected by remember { mutableStateOf(false) }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -111,13 +114,15 @@ fun ConnectedParams() {
 fun DisconnectedParams()
 {
     Divider(modifier = Modifier.padding(bottom = 8.dp))
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 12.dp)
-    ) {
+            .padding(top = 12.dp))
+    {
+        NamedTextField(name = "Username or Email", visualTransformation = VisualTransformation.None)
+        NamedTextField(name = "Password", visualTransformation = PasswordVisualTransformation())
+        Spacer(modifier = Modifier.height(12.dp))
         Button(onClick = { /*TODO*/ }) {
             Text(
                 "Connection",
@@ -125,4 +130,5 @@ fun DisconnectedParams()
             )
         }
     }
+
 }
