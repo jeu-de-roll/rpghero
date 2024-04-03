@@ -9,12 +9,22 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.rpghero.ui.theme.RPGHeroTheme
-import com.example.rpghero.menu.TopBarMenu
-import com.example.rpghero.menu.DiceMenu
-import com.example.rpghero.menu.JoinMenu
-import com.example.rpghero.menu.CreateMenu
-import com.example.rpghero.menu.SessionListMenu
-import com.example.rpghero.menu.ParamsMenu
+
+import com.example.rpghero.mainMenu.TopBarMenu
+import com.example.rpghero.mainMenu.DiceMenu
+import com.example.rpghero.mainMenu.JoinMenu
+import com.example.rpghero.mainMenu.CreateMenu
+import com.example.rpghero.mainMenu.SessionListMenu
+import com.example.rpghero.mainMenu.ParamsMenu
+
+import com.example.rpghero.mainMenu.TopBarMenu
+import com.example.rpghero.mainMenu.DiceMenu
+import com.example.rpghero.mainMenu.JoinMenu
+import com.example.rpghero.mainMenu.CreateMenu
+import com.example.rpghero.mainMenu.SessionListMenu
+import com.example.rpghero.room.CharacterListMenu
+import com.example.rpghero.room.RoomTopMenu
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,10 +48,11 @@ fun MainNavigation() {
                 navigateToOpenScreen = { navController.navigate("OpenScreen") },
                 navigateToJoinScreen = { navController.navigate("JoinScreen") },
                 navigateToCreateScreen = { navController.navigate("CreateScreen") },
-                navigateToParamScreen = { navController.navigate("ParamScreen") })
+                navigateToParamScreen = { navController.navigate("ParamScreen") }
+            )
         }
         composable("OpenScreen") {
-            OpenScreen()
+            OpenScreen(navigateToRoomScreen = { navController.navigate("RoomScreen") })
         }
         composable("JoinScreen") {
             JoinScreen()
@@ -56,6 +67,23 @@ fun MainNavigation() {
                 navigateToCreateScreen = { navController.navigate("CreateScreen") }
             )
         }
+
+        composable("RoomScreen") {
+            RoomScreen(
+                navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
+                navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
+                navigateToFilesScreen = { navController.navigate("FilesScreen") })
+        }
+
+        composable("CharacterScreen") {
+            CharacterScreen()
+        }
+        composable("ChronicsScreen") {
+            ChronicsScreen()
+        }
+        composable("FilesScreen") {
+            FilesScreen()
+        }
     }
 }
 
@@ -68,12 +96,22 @@ fun HomeScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Uni
 }
 
 @Composable
-fun OpenScreen() {
+fun RoomScreen(navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit) {
+    Column {
+        RoomTopMenu(navigateToCharactersScreen, navigateToChronicsScreen, navigateToFilesScreen)
+        DiceMenu()
+    }
+}
+
+@Composable
+fun OpenScreen(navigateToRoomScreen: () -> Unit) {
     SessionListMenu(sessions = arrayOf(
         "Test session 1",
         "Test session 2",
         "Test session 3",
-        ))
+        ),
+        navigateToRoomScreen = navigateToRoomScreen,
+    )
 }
 
 @Composable
@@ -87,8 +125,7 @@ fun CreateScreen() {
 }
 
 @Composable
-fun ParamsScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit)
-{
+fun ParamsScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit) {
     Column() {
         TopBarMenu(
             navigateToOpenScreen = navigateToOpenScreen,
@@ -98,4 +135,24 @@ fun ParamsScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> U
         )
         ParamsMenu()
     }
+}
+
+@Composable
+fun CharacterScreen() {
+    CharacterListMenu(characters = arrayOf(
+        "Tav",
+        "Astarion",
+        "Lae'zel",
+        "Shadowheart",
+    ))
+}
+
+@Composable
+fun ChronicsScreen() {
+    //ChronicsMenu()
+}
+
+@Composable
+fun FilesScreen() {
+    //FilesMenu()
 }
