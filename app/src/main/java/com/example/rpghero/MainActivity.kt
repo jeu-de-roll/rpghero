@@ -20,6 +20,7 @@ import com.example.rpghero.mainMenu.JoinMenu
 import com.example.rpghero.mainMenu.CreateMenu
 import com.example.rpghero.mainMenu.SessionListMenu
 import com.example.rpghero.mainMenu.ParamsMenu
+import com.example.rpghero.room.Character
 
 import com.example.rpghero.room.ShareFilePage
 import com.example.rpghero.room.CharacterListMenu
@@ -99,7 +100,8 @@ fun MainNavigation() {
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
-                navigateToParamScreen = { navController.navigate("SessionSettingsScreen") }
+                navigateToParamScreen = { navController.navigate("SessionSettingsScreen") },
+                navigateToSelectedCharacterScreen = { navController.navigate("CharacterDetailScreen") }
             )
         }
         composable("ChronicsScreen") {
@@ -133,6 +135,16 @@ fun MainNavigation() {
 
         composable("ChronicScreen") {
             ChronicScreen(
+                sessionName = "Baldur's Gate 3",
+                navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
+                navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
+                navigateToFilesScreen = { navController.navigate("FilesScreen") },
+                navigateToParamScreen = { navController.navigate("SessionSettingsScreen") }
+            )
+        }
+
+        composable("CharacterDetailScreen") {
+            CharacterDetailScreen(
                 sessionName = "Baldur's Gate 3",
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
@@ -221,7 +233,7 @@ fun ParamsScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> U
 }
 
 @Composable
-fun CharacterScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+fun CharacterScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit, navigateToSelectedCharacterScreen: () -> Unit) {
     Column() {
         RoomTopMenu(
             { },
@@ -242,7 +254,8 @@ fun CharacterScreen(sessionName: String, navigateToCharactersScreen: () -> Unit,
                 "Astarion",
                 "Lae'zel",
                 "Shadowheart",
-            )
+            ),
+            navigateToSelectedCharacterScreen
         )
     }
 }
@@ -327,5 +340,24 @@ fun ChronicScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, n
             style = MaterialTheme.typography.headlineSmall,
         )
         Chronics()
+    }
+}
+
+@Composable
+fun CharacterDetailScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Column {
+        RoomTopMenu(
+            navigateToCharactersScreen,
+            navigateToChronicsScreen,
+            navigateToFilesScreen,
+            navigateToParamScreen
+        )
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = sessionName,
+            style = MaterialTheme.typography.headlineSmall,
+        )
+        Character()
     }
 }

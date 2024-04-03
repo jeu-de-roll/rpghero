@@ -18,13 +18,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-class CharacterListMenu {
-}
 
 @Composable
-fun CharacterButton(characterName : String) {
+fun CharacterButton(characterName : String, navigateToSelectedCharacterScreen: () -> Unit) {
     Button(
-        onClick = {  },
+        onClick = { navigateToSelectedCharacterScreen() },
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .fillMaxWidth()
@@ -43,7 +41,7 @@ fun CharacterButton(characterName : String) {
 }
 
 @Composable
-fun CharacterListMenu(characters : Array<String>) {
+fun CharacterListMenu(characters : Array<String>, navigateToSelectedCharacterScreen: () -> Unit) {
     LazyColumn (
         modifier = Modifier
             .fillMaxHeight()
@@ -52,7 +50,7 @@ fun CharacterListMenu(characters : Array<String>) {
     {
         items(characters) { character ->
             Spacer(modifier = Modifier.height(8.dp))
-            CharacterButton(characterName = character)
+            CharacterButton(characterName = character, navigateToSelectedCharacterScreen)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
