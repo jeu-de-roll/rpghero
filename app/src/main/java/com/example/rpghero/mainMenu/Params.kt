@@ -128,6 +128,12 @@ fun DisconnectedParams()
                 style = MaterialTheme.typography.headlineSmall
             )
         }
+        Spacer(modifier = Modifier.height(12.dp))
+        Button(onClick = { /*TODO*/ }) {
+            Text(
+                "Register",
+                style = MaterialTheme.typography.headlineSmall
+            )
+        }
     }
-
 }
