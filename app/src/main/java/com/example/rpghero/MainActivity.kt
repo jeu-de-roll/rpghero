@@ -1,15 +1,25 @@
 package com.example.rpghero
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -155,24 +165,39 @@ fun MainNavigation() {
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
-    Column {
-        TopBarMenu(navigateToOpenScreen, navigateToJoinScreen, navigateToCreateScreen, navigateToParamScreen)
-    }
+    Scaffold (
+        topBar = {
+            TopBarMenu(navigateToOpenScreen, navigateToJoinScreen, navigateToCreateScreen, navigateToParamScreen)
+        },
+        floatingActionButton = {
+            FloatingActionButtonDice()
+        },
+        content = { }
+    )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun RoomScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
-    Column {
-        RoomTopMenu(navigateToCharactersScreen, navigateToChronicsScreen, navigateToFilesScreen, navigateToParamScreen)
-        Text(
-            modifier = Modifier
-                .fillMaxWidth(),
-            text = sessionName,
-            style = MaterialTheme.typography.headlineSmall,
-        )
-    }
+    Scaffold (
+        topBar = {
+            RoomTopMenu(navigateToCharactersScreen, navigateToChronicsScreen, navigateToFilesScreen, navigateToParamScreen)
+        },
+        floatingActionButton = {
+            FloatingActionButtonDice()
+        },
+        content = {
+            Surface(modifier = Modifier.padding(124.dp)) {
+                Text(
+                    text = sessionName,
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+            }
+        }
+    )
 }
 
 @Composable
@@ -359,5 +384,15 @@ fun CharacterDetailScreen(sessionName: String, navigateToCharactersScreen: () ->
             style = MaterialTheme.typography.headlineSmall,
         )
         Character()
+    }
+}
+
+@Composable
+fun FloatingActionButtonDice() {
+    FloatingActionButton(
+        onClick = { },
+        modifier = Modifier
+    ) {
+        Icon(painter = painterResource(id = R.drawable.dice), "Dice")
     }
 }
