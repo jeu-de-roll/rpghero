@@ -23,6 +23,8 @@ import com.example.rpghero.mainMenu.ParamsMenu
 
 import com.example.rpghero.room.ShareFilePage
 import com.example.rpghero.room.CharacterListMenu
+import com.example.rpghero.room.Chronics
+import com.example.rpghero.room.ChronicsListMenu
 import com.example.rpghero.room.RoomTopMenu
 import com.example.rpghero.room.SessionSettingsMenu
 
@@ -106,7 +108,8 @@ fun MainNavigation() {
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
-                navigateToParamScreen = { navController.navigate("SessionSettingsScreen") }
+                navigateToParamScreen = { navController.navigate("SessionSettingsScreen") },
+                navigateToSelectedChronicScreen = { navController.navigate("ChronicScreen") },
             )
         }
         composable("FilesScreen") {
@@ -120,6 +123,16 @@ fun MainNavigation() {
         }
         composable("SessionSettingsScreen") {
             SessionSettingsScreen(
+                sessionName = "Baldur's Gate 3",
+                navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
+                navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
+                navigateToFilesScreen = { navController.navigate("FilesScreen") },
+                navigateToParamScreen = { navController.navigate("SessionSettingsScreen") }
+            )
+        }
+
+        composable("ChronicScreen") {
+            ChronicScreen(
                 sessionName = "Baldur's Gate 3",
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
@@ -235,7 +248,7 @@ fun CharacterScreen(sessionName: String, navigateToCharactersScreen: () -> Unit,
 }
 
 @Composable
-fun ChronicsScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+fun ChronicsScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit, navigateToSelectedChronicScreen: () -> Unit) {
     Column() {
         RoomTopMenu(
             navigateToCharactersScreen,
@@ -249,7 +262,14 @@ fun ChronicsScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, 
             text = sessionName,
             style = MaterialTheme.typography.headlineSmall,
         )
-        //ChronicsPage
+        ChronicsListMenu(
+            chronics = arrayOf(
+                "Act 1",
+                "Act 2",
+                "Act 3",
+                ),
+            navigateToSelectedChronicScreen
+        )
     }
 }
 
@@ -288,5 +308,24 @@ fun SessionSettingsScreen(sessionName: String, navigateToCharactersScreen: () ->
             style = MaterialTheme.typography.headlineSmall,
         )
         SessionSettingsMenu()
+    }
+}
+
+@Composable
+fun ChronicScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Column {
+        RoomTopMenu(
+            navigateToCharactersScreen,
+            navigateToChronicsScreen,
+            navigateToFilesScreen,
+            navigateToParamScreen
+        )
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = sessionName,
+            style = MaterialTheme.typography.headlineSmall,
+        )
+        Chronics()
     }
 }
