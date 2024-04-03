@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 
 @Composable
-fun RoomTopMenu(navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit) {
+fun RoomTopMenu(navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToSettingsScreen: () -> Unit) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val buttonWidth = screenWidth / 4
@@ -47,7 +47,8 @@ fun RoomTopMenu(navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen
             navigateToFilesScreen = navigateToFilesScreen
         )
         SettingsBox(
-            buttonWidth
+            buttonWidth,
+            navigateToSettingsScreen = navigateToSettingsScreen
         )
     }
 }
@@ -119,14 +120,14 @@ private fun FilesBox(width: Dp, navigateToFilesScreen: () -> Unit)
 }
 
 @Composable
-private fun SettingsBox(width: Dp) {
+private fun SettingsBox(width: Dp, navigateToSettingsScreen: () -> Unit) {
     Box(
         modifier = Modifier
             .background(color = Color(0xFFBDBDBD))
             .size(width)
             .border(width = 1.dp, color = Color.Black)
             .clickable {
-                /* TODO */
+                navigateToSettingsScreen()
             }
     ) {
         Icon(

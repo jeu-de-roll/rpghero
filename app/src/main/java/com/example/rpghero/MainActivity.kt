@@ -4,26 +4,27 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.rpghero.ui.theme.RPGHeroTheme
 
 import com.example.rpghero.mainMenu.TopBarMenu
-import com.example.rpghero.mainMenu.DiceMenu
 import com.example.rpghero.mainMenu.JoinMenu
 import com.example.rpghero.mainMenu.CreateMenu
 import com.example.rpghero.mainMenu.SessionListMenu
 import com.example.rpghero.mainMenu.ParamsMenu
 
-import com.example.rpghero.mainMenu.TopBarMenu
-import com.example.rpghero.mainMenu.DiceMenu
-import com.example.rpghero.mainMenu.JoinMenu
-import com.example.rpghero.mainMenu.CreateMenu
-import com.example.rpghero.mainMenu.SessionListMenu
+import com.example.rpghero.room.ShareFilePage
 import com.example.rpghero.room.CharacterListMenu
 import com.example.rpghero.room.RoomTopMenu
+import com.example.rpghero.room.SessionSettingsMenu
 
 
 class MainActivity : ComponentActivity() {
@@ -52,13 +53,26 @@ fun MainNavigation() {
             )
         }
         composable("OpenScreen") {
-            OpenScreen(navigateToRoomScreen = { navController.navigate("RoomScreen") })
+            OpenScreen(
+                navigateToRoomScreen = { navController.navigate("RoomScreen") },
+                navigateToJoinScreen = { navController.navigate("JoinScreen") },
+                navigateToCreateScreen = { navController.navigate("CreateScreen") },
+                navigateToParamScreen = { navController.navigate("ParamScreen") }
+            )
         }
         composable("JoinScreen") {
-            JoinScreen()
+            JoinScreen(
+                navigateToOpenScreen = { navController.navigate("OpenScreen") },
+                navigateToCreateScreen = { navController.navigate("CreateScreen") },
+                navigateToParamsScreen = { navController.navigate("ParamScreen") }
+            )
         }
         composable("CreateScreen") {
-            CreateScreen()
+            CreateScreen(
+                navigateToOpenScreen = { navController.navigate("OpenScreen") },
+                navigateToJoinScreen = { navController.navigate("JoinScreen") },
+                navigateToParamsScreen = { navController.navigate("ParamScreen") }
+            )
         }
         composable("ParamScreen") {
             ParamsScreen(
@@ -70,19 +84,48 @@ fun MainNavigation() {
 
         composable("RoomScreen") {
             RoomScreen(
+                sessionName = "Baldur's Gate 3",
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
-                navigateToFilesScreen = { navController.navigate("FilesScreen") })
+                navigateToFilesScreen = { navController.navigate("FilesScreen") },
+                navigateToParamScreen = { navController.navigate("SessionSettingsScreen") }
+            )
         }
 
         composable("CharacterScreen") {
-            CharacterScreen()
+            CharacterScreen(sessionName = "Baldur's Gate 3",
+                navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
+                navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
+                navigateToFilesScreen = { navController.navigate("FilesScreen") },
+                navigateToParamScreen = { navController.navigate("SessionSettingsScreen") }
+            )
         }
         composable("ChronicsScreen") {
-            ChronicsScreen()
+            ChronicsScreen(
+                sessionName = "Baldur's Gate 3",
+                navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
+                navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
+                navigateToFilesScreen = { navController.navigate("FilesScreen") },
+                navigateToParamScreen = { navController.navigate("SessionSettingsScreen") }
+            )
         }
         composable("FilesScreen") {
-            FilesScreen()
+            FilesScreen(
+                sessionName = "Baldur's Gate 3",
+                navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
+                navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
+                navigateToFilesScreen = { navController.navigate("FilesScreen") },
+                navigateToParamScreen = { navController.navigate("SessionSettingsScreen") }
+            )
+        }
+        composable("SessionSettingsScreen") {
+            SessionSettingsScreen(
+                sessionName = "Baldur's Gate 3",
+                navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
+                navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
+                navigateToFilesScreen = { navController.navigate("FilesScreen") },
+                navigateToParamScreen = { navController.navigate("SessionSettingsScreen") }
+            )
         }
     }
 }
@@ -91,37 +134,64 @@ fun MainNavigation() {
 fun HomeScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
     Column {
         TopBarMenu(navigateToOpenScreen, navigateToJoinScreen, navigateToCreateScreen, navigateToParamScreen)
-        DiceMenu()
     }
 }
 
 @Composable
-fun RoomScreen(navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit) {
+fun RoomScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
     Column {
-        RoomTopMenu(navigateToCharactersScreen, navigateToChronicsScreen, navigateToFilesScreen)
-        DiceMenu()
+        RoomTopMenu(navigateToCharactersScreen, navigateToChronicsScreen, navigateToFilesScreen, navigateToParamScreen)
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = sessionName,
+            style = MaterialTheme.typography.headlineSmall,
+        )
     }
 }
 
 @Composable
-fun OpenScreen(navigateToRoomScreen: () -> Unit) {
-    SessionListMenu(sessions = arrayOf(
-        "Test session 1",
-        "Test session 2",
-        "Test session 3",
-        ),
-        navigateToRoomScreen = navigateToRoomScreen,
-    )
+fun OpenScreen(navigateToRoomScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Column() {
+        TopBarMenu(
+            navigateToOpenScreen = { },
+            navigateToJoinScreen = navigateToJoinScreen,
+            navigateToCreateScreen = navigateToCreateScreen,
+            navigateToParamScreen = navigateToParamScreen,
+        )
+        SessionListMenu(
+            sessions = arrayOf(
+                "Baldur's Gate 3",
+                ),
+            navigateToRoomScreen = navigateToRoomScreen,
+        )
+    }
 }
 
 @Composable
-fun JoinScreen() {
-    JoinMenu()
+fun JoinScreen(navigateToOpenScreen: () -> Unit, navigateToCreateScreen: () -> Unit, navigateToParamsScreen: () -> Unit) {
+    Column() {
+        TopBarMenu(
+            navigateToOpenScreen = navigateToOpenScreen,
+            navigateToJoinScreen = { },
+            navigateToCreateScreen = navigateToCreateScreen,
+            navigateToParamScreen = navigateToParamsScreen,
+        )
+        JoinMenu()
+    }
 }
 
 @Composable
-fun CreateScreen() {
-    CreateMenu()
+fun CreateScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToParamsScreen: () -> Unit) {
+    Column() {
+        TopBarMenu(
+            navigateToOpenScreen = navigateToOpenScreen,
+            navigateToJoinScreen = navigateToJoinScreen,
+            navigateToCreateScreen = { },
+            navigateToParamScreen = navigateToParamsScreen,
+        )
+        CreateMenu()
+    }
 }
 
 @Composable
@@ -131,28 +201,92 @@ fun ParamsScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> U
             navigateToOpenScreen = navigateToOpenScreen,
             navigateToJoinScreen = navigateToJoinScreen,
             navigateToCreateScreen = navigateToCreateScreen,
-            navigateToParamScreen = { /*Nothing here, we dont want to travel to the params form the params*/ }
+            navigateToParamScreen = { }
         )
         ParamsMenu()
     }
 }
 
 @Composable
-fun CharacterScreen() {
-    CharacterListMenu(characters = arrayOf(
-        "Tav",
-        "Astarion",
-        "Lae'zel",
-        "Shadowheart",
-    ))
+fun CharacterScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Column() {
+        RoomTopMenu(
+            { },
+            navigateToChronicsScreen,
+            navigateToFilesScreen,
+            navigateToParamScreen
+        )
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally),
+            text = sessionName,
+            style = MaterialTheme.typography.headlineSmall,
+        )
+        CharacterListMenu(
+            characters = arrayOf(
+                "Tav",
+                "Astarion",
+                "Lae'zel",
+                "Shadowheart",
+            )
+        )
+    }
 }
 
 @Composable
-fun ChronicsScreen() {
-    //ChronicsMenu()
+fun ChronicsScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Column() {
+        RoomTopMenu(
+            navigateToCharactersScreen,
+            { },
+            navigateToFilesScreen,
+            navigateToParamScreen
+        )
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = sessionName,
+            style = MaterialTheme.typography.headlineSmall,
+        )
+        //ChronicsPage
+    }
 }
 
 @Composable
-fun FilesScreen() {
-    //FilesMenu()
+fun FilesScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Column() {
+        RoomTopMenu(
+            navigateToCharactersScreen,
+            navigateToChronicsScreen,
+            { },
+            navigateToParamScreen
+        )
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = sessionName,
+            style = MaterialTheme.typography.headlineSmall,
+        )
+        ShareFilePage()
+    }
+}
+
+@Composable
+fun SessionSettingsScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Column() {
+        RoomTopMenu(
+            navigateToCharactersScreen,
+            navigateToChronicsScreen,
+            navigateToFilesScreen,
+            { },
+        )
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = sessionName,
+            style = MaterialTheme.typography.headlineSmall,
+        )
+        SessionSettingsMenu()
+    }
 }
