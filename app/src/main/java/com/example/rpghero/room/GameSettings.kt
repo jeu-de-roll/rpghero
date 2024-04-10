@@ -22,7 +22,10 @@ fun SessionSettingsMenu()
             .fillMaxWidth()
             .padding(vertical = 16.dp, horizontal = 16.dp)
     ){
-        Text("PARAMETERS", style = MaterialTheme.typography.headlineLarge)
+        Text(
+            "PARAMETERS",
+            style = MaterialTheme.typography.bodyLarge
+        )
         SoundParam()
         VibrationParam()
         if(connected)
@@ -49,7 +52,7 @@ fun SoundParam()
     ) {
         Text(
             "Sound",
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.bodySmall
         )
         Slider(
             value = sliderPosition,
@@ -58,6 +61,7 @@ fun SoundParam()
         )
         Text(
             text = sliderPosition.toString().slice(arrayListOf(0, 1, 2)),
+            style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.padding(start = 8.dp)
         )
     }
@@ -74,7 +78,7 @@ fun VibrationParam()
             .fillMaxWidth()
     ){
         Text("Vibration",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.padding(end = 8.dp))
         Switch(
             checked = vibration,
@@ -86,10 +90,16 @@ fun VibrationParam()
 fun ConnectedParams() {
     Column {
         Divider(modifier = Modifier.padding(bottom = 8.dp))
-        Text("Username : bipboup KakouKakou",
-            fontSize = 20.sp)
-        Text("Email : adresse@gmail.com",
-            fontSize = 20.sp)
+        Text(
+            "Username : bipboup KakouKakou",
+            style = MaterialTheme.typography.bodySmall,
+            fontSize = 20.sp
+        )
+        Text(
+            "Email : adresse@gmail.com",
+            style = MaterialTheme.typography.bodySmall,
+            fontSize = 20.sp
+        )
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -100,7 +110,7 @@ fun ConnectedParams() {
             Button(onClick = { /*TODO*/ }) {
                 Text(
                     "Disconnection",
-                    style = MaterialTheme.typography.headlineSmall
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         }
@@ -123,7 +133,7 @@ fun DisconnectedParams()
         Button(onClick = { /*TODO*/ }) {
             Text(
                 "Connection",
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.bodySmall
             )
         }
     }

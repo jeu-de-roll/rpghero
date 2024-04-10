@@ -62,7 +62,7 @@ fun TextButtonBox(text : String, onClickEvent: () -> Unit)
             modifier = Modifier
                 .align(Alignment.Center),
             text = text,
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.bodySmall,
         )
     }
 }
