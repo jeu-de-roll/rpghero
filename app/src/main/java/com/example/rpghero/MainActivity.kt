@@ -189,28 +189,7 @@ fun HomeScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Uni
             FloatingActionButtonDice()
         },
         content = {
-            var clicked by remember { mutableStateOf(false) }
-            var dice by remember { mutableIntStateOf(404) }
-            val rand = Random
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .clickable
-                {
-                    dice = rand.nextInt(20) + 1
-                    clicked = true
-                },
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                if (clicked) {
-                    Text(text = dice.toString(), style = MaterialTheme.typography.displayLarge)
-                }
-                else {
-                    Text("Tap on Screen to roll for initiative",
-                        style = MaterialTheme.typography.displayLarge,
-                        textAlign = TextAlign.Center)
-                }
-            }
+            RollDices()
         }
     )
 }
@@ -226,12 +205,16 @@ fun RoomScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navi
             FloatingActionButtonDice()
         },
         content = {
-            Surface(modifier = Modifier.padding(124.dp)) {
+            Surface(modifier = Modifier
+                .padding(top=124.dp)
+                .fillMaxWidth()) {
                 Text(
                     text = sessionName,
                     style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center
                 )
             }
+            RollDices()
         }
     )
 }
@@ -308,6 +291,7 @@ fun CharacterScreen(sessionName: String, navigateToCharactersScreen: () -> Unit,
                 .align(Alignment.CenterHorizontally),
             text = sessionName,
             style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
         )
         CharacterListMenu(
             characters = arrayOf(
@@ -335,6 +319,7 @@ fun ChronicsScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, 
                 .fillMaxWidth(),
             text = sessionName,
             style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
         )
         ChronicsListMenu(
             chronics = arrayOf(
@@ -361,6 +346,7 @@ fun FilesScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, nav
                 .fillMaxWidth(),
             text = sessionName,
             style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
         )
         ShareFilePage()
     }
@@ -380,6 +366,7 @@ fun SessionSettingsScreen(sessionName: String, navigateToCharactersScreen: () ->
                 .fillMaxWidth(),
             text = sessionName,
             style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
         )
         SessionSettingsMenu()
     }
@@ -399,6 +386,7 @@ fun ChronicScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, n
                 .fillMaxWidth(),
             text = sessionName,
             style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
         )
         Chronics()
     }
@@ -418,6 +406,7 @@ fun CharacterDetailScreen(sessionName: String, navigateToCharactersScreen: () ->
                 .fillMaxWidth(),
             text = sessionName,
             style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
         )
         Character()
     }
@@ -430,5 +419,32 @@ fun FloatingActionButtonDice() {
         modifier = Modifier
     ) {
         Icon(painter = painterResource(id = R.drawable.dice), "Dice")
+    }
+}
+
+@Composable
+fun RollDices()
+{
+    var clicked by remember { mutableStateOf(false) }
+    var dice by remember { mutableIntStateOf(404) }
+    val rand = Random
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .clickable
+        {
+            dice = rand.nextInt(20) + 1
+            clicked = true
+        },
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        if (clicked) {
+            Text(text = dice.toString(), style = MaterialTheme.typography.displayLarge)
+        }
+        else {
+            Text("Tap on Screen to roll for initiative",
+                style = MaterialTheme.typography.displayLarge,
+                textAlign = TextAlign.Center)
+        }
     }
 }
