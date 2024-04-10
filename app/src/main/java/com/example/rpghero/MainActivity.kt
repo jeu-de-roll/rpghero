@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -77,6 +79,7 @@ fun MainNavigation() {
         }
         composable("OpenScreen") {
             OpenScreen(
+                navigateToHomeScreen = { navController.navigate("HomeScreen") },
                 navigateToRoomScreen = { navController.navigate("RoomScreen") },
                 navigateToJoinScreen = { navController.navigate("JoinScreen") },
                 navigateToCreateScreen = { navController.navigate("CreateScreen") },
@@ -85,6 +88,7 @@ fun MainNavigation() {
         }
         composable("JoinScreen") {
             JoinScreen(
+                navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToOpenScreen = { navController.navigate("OpenScreen") },
                 navigateToCreateScreen = { navController.navigate("CreateScreen") },
                 navigateToParamsScreen = { navController.navigate("ParamScreen") }
@@ -92,6 +96,7 @@ fun MainNavigation() {
         }
         composable("CreateScreen") {
             CreateScreen(
+                navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToOpenScreen = { navController.navigate("OpenScreen") },
                 navigateToJoinScreen = { navController.navigate("JoinScreen") },
                 navigateToParamsScreen = { navController.navigate("ParamScreen") }
@@ -99,6 +104,7 @@ fun MainNavigation() {
         }
         composable("ParamScreen") {
             ParamsScreen(
+                navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToOpenScreen = { navController.navigate("OpenScreen") },
                 navigateToJoinScreen = { navController.navigate("JoinScreen") },
                 navigateToCreateScreen = { navController.navigate("CreateScreen") }
@@ -117,6 +123,7 @@ fun MainNavigation() {
 
         composable("CharacterScreen") {
             CharacterScreen(sessionName = "Baldur's Gate 3",
+                navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
@@ -127,6 +134,7 @@ fun MainNavigation() {
         composable("ChronicsScreen") {
             ChronicsScreen(
                 sessionName = "Baldur's Gate 3",
+                navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
@@ -137,6 +145,7 @@ fun MainNavigation() {
         composable("FilesScreen") {
             FilesScreen(
                 sessionName = "Baldur's Gate 3",
+                navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
@@ -146,6 +155,7 @@ fun MainNavigation() {
         composable("SessionSettingsScreen") {
             SessionSettingsScreen(
                 sessionName = "Baldur's Gate 3",
+                navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
@@ -156,6 +166,7 @@ fun MainNavigation() {
         composable("ChronicScreen") {
             ChronicScreen(
                 sessionName = "Baldur's Gate 3",
+                navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
@@ -166,6 +177,7 @@ fun MainNavigation() {
         composable("CharacterDetailScreen") {
             CharacterDetailScreen(
                 sessionName = "Baldur's Gate 3",
+                navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
@@ -234,197 +246,365 @@ fun RoomScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navi
     )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun OpenScreen(navigateToRoomScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
-    Column() {
-        TopBarMenu(
-            navigateToOpenScreen = { },
-            navigateToJoinScreen = navigateToJoinScreen,
-            navigateToCreateScreen = navigateToCreateScreen,
-            navigateToParamScreen = navigateToParamScreen,
-        )
-        SessionListMenu(
-            sessions = arrayOf(
-                "Baldur's Gate 3",
-                ),
-            navigateToRoomScreen = navigateToRoomScreen,
-        )
-    }
+fun OpenScreen(navigateToHomeScreen: () -> Unit, navigateToRoomScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Scaffold (
+        topBar = {
+            TopBarMenu(
+                navigateToOpenScreen = { },
+                navigateToJoinScreen = navigateToJoinScreen,
+                navigateToCreateScreen = navigateToCreateScreen,
+                navigateToParamScreen = navigateToParamScreen,
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButtonHome(
+                {
+                    navigateToHomeScreen()
+                }
+            )
+        },
+        content = {
+            Surface(modifier = Modifier
+                .padding(top = 124.dp)
+                .fillMaxWidth()) {
+                SessionListMenu(
+                    sessions = arrayOf(
+                        "Baldur's Gate 3",
+                    ),
+                    navigateToRoomScreen = navigateToRoomScreen,
+                )
+            }
+        }
+    )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun JoinScreen(navigateToOpenScreen: () -> Unit, navigateToCreateScreen: () -> Unit, navigateToParamsScreen: () -> Unit) {
-    Column() {
-        TopBarMenu(
-            navigateToOpenScreen = navigateToOpenScreen,
-            navigateToJoinScreen = { },
-            navigateToCreateScreen = navigateToCreateScreen,
-            navigateToParamScreen = navigateToParamsScreen,
-        )
-        JoinMenu()
-    }
+fun JoinScreen(navigateToHomeScreen: () -> Unit, navigateToOpenScreen: () -> Unit, navigateToCreateScreen: () -> Unit, navigateToParamsScreen: () -> Unit) {
+    Scaffold (
+        topBar = {
+            TopBarMenu(
+                navigateToOpenScreen = navigateToOpenScreen,
+                navigateToJoinScreen = { },
+                navigateToCreateScreen = navigateToCreateScreen,
+                navigateToParamScreen = navigateToParamsScreen,
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButtonHome(
+                {
+                    navigateToHomeScreen()
+                }
+            )
+        },
+        content = {
+            Surface(modifier = Modifier
+                .padding(top = 124.dp)
+                .fillMaxWidth())
+            {
+                JoinMenu()
+            }
+        }
+    )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CreateScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToParamsScreen: () -> Unit) {
-    Column() {
-        TopBarMenu(
-            navigateToOpenScreen = navigateToOpenScreen,
-            navigateToJoinScreen = navigateToJoinScreen,
-            navigateToCreateScreen = { },
-            navigateToParamScreen = navigateToParamsScreen,
-        )
-        CreateMenu()
-    }
+fun CreateScreen(navigateToHomeScreen: () -> Unit, navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToParamsScreen: () -> Unit) {
+    Scaffold (
+        topBar = {
+            TopBarMenu(
+                navigateToOpenScreen = navigateToOpenScreen,
+                navigateToJoinScreen = navigateToJoinScreen,
+                navigateToCreateScreen = { },
+                navigateToParamScreen = navigateToParamsScreen,
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButtonHome(
+                {
+                    navigateToHomeScreen()
+                }
+            )
+        },
+        content = {
+            Surface(modifier = Modifier
+                .padding(top = 124.dp)
+                .fillMaxWidth())
+            {
+                CreateMenu()
+            }
+        }
+    )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ParamsScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit) {
-    Column() {
-        TopBarMenu(
-            navigateToOpenScreen = navigateToOpenScreen,
-            navigateToJoinScreen = navigateToJoinScreen,
-            navigateToCreateScreen = navigateToCreateScreen,
-            navigateToParamScreen = { }
-        )
-        ParamsMenu()
-    }
+fun ParamsScreen(navigateToHomeScreen: () -> Unit, navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit) {
+    Scaffold (
+        topBar = {
+            TopBarMenu(
+                navigateToOpenScreen = navigateToOpenScreen,
+                navigateToJoinScreen = navigateToJoinScreen,
+                navigateToCreateScreen = navigateToCreateScreen,
+                navigateToParamScreen = { }
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButtonHome(
+                {
+                    navigateToHomeScreen()
+                }
+            )
+        },
+        content = {
+            Surface(modifier = Modifier
+                .padding(top = 124.dp)
+                .fillMaxWidth())
+            {
+                ParamsMenu()
+            }
+        }
+    )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CharacterScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit, navigateToSelectedCharacterScreen: () -> Unit) {
-    Column() {
-        RoomTopMenu(
-            { },
-            navigateToChronicsScreen,
-            navigateToFilesScreen,
-            navigateToParamScreen
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-            text = sessionName,
-            style = MaterialTheme.typography.headlineSmall,
-            textAlign = TextAlign.Center
-        )
-        CharacterListMenu(
-            characters = arrayOf(
-                "Tav",
-                "Astarion",
-                "Lae'zel",
-                "Shadowheart",
-            ),
-            navigateToSelectedCharacterScreen
-        )
-    }
+fun CharacterScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit, navigateToSelectedCharacterScreen: () -> Unit) {
+    Scaffold (
+        topBar = {
+            RoomTopMenu(
+                { },
+                navigateToChronicsScreen,
+                navigateToFilesScreen,
+                navigateToParamScreen
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButtonHome(
+                {
+                    navigateToHomeScreen()
+                }
+            )
+        },
+        content = {
+            Surface(modifier = Modifier
+                .padding(top = 124.dp)
+                .fillMaxWidth())
+            {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = sessionName,
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center
+                )
+                CharacterListMenu(
+                    characters = arrayOf(
+                        "Tav",
+                        "Astarion",
+                        "Lae'zel",
+                        "Shadowheart",
+                    ),
+                    navigateToSelectedCharacterScreen
+                )
+            }
+        }
+    )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ChronicsScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit, navigateToSelectedChronicScreen: () -> Unit) {
-    Column() {
-        RoomTopMenu(
-            navigateToCharactersScreen,
-            { },
-            navigateToFilesScreen,
-            navigateToParamScreen
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth(),
-            text = sessionName,
-            style = MaterialTheme.typography.headlineSmall,
-            textAlign = TextAlign.Center
-        )
-        ChronicsListMenu(
-            chronics = arrayOf(
-                "Act 1",
-                "Act 2",
-                "Act 3",
-                ),
-            navigateToSelectedChronicScreen
-        )
-    }
+fun ChronicsScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit, navigateToSelectedChronicScreen: () -> Unit) {
+    Scaffold (
+        topBar = {
+            RoomTopMenu(
+                navigateToCharactersScreen,
+                { },
+                navigateToFilesScreen,
+                navigateToParamScreen
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButtonHome(
+                {
+                    navigateToHomeScreen()
+                }
+            )
+        },
+        content = {
+            Surface(modifier = Modifier
+                .padding(top = 124.dp)
+                .fillMaxWidth())
+            {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = sessionName,
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center
+                )
+                ChronicsListMenu(
+                    chronics = arrayOf(
+                        "Act 1",
+                        "Act 2",
+                        "Act 3",
+                    ),
+                    navigateToSelectedChronicScreen
+                )
+            }
+        }
+    )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FilesScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
-    Column() {
-        RoomTopMenu(
-            navigateToCharactersScreen,
-            navigateToChronicsScreen,
-            { },
-            navigateToParamScreen
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth(),
-            text = sessionName,
-            style = MaterialTheme.typography.headlineSmall,
-            textAlign = TextAlign.Center
-        )
-        ShareFilePage()
-    }
+fun FilesScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Scaffold (
+        topBar = {
+            RoomTopMenu(
+                navigateToCharactersScreen,
+                navigateToChronicsScreen,
+                { },
+                navigateToParamScreen
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButtonHome(
+                {
+                    navigateToHomeScreen()
+                }
+            )
+        },
+        content = {
+            Surface(modifier = Modifier
+                .padding(top = 124.dp)
+                .fillMaxWidth())
+            {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = sessionName,
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center
+                )
+                ShareFilePage()
+            }
+        }
+    )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SessionSettingsScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
-    Column() {
-        RoomTopMenu(
-            navigateToCharactersScreen,
-            navigateToChronicsScreen,
-            navigateToFilesScreen,
-            { },
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth(),
-            text = sessionName,
-            style = MaterialTheme.typography.headlineSmall,
-            textAlign = TextAlign.Center
-        )
-        SessionSettingsMenu()
-    }
+fun SessionSettingsScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Scaffold (
+        topBar = {
+            RoomTopMenu(
+                navigateToCharactersScreen,
+                navigateToChronicsScreen,
+                navigateToFilesScreen,
+                { },
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButtonHome(
+                {
+                    navigateToHomeScreen()
+                }
+            )
+        },
+        content = {
+            Surface(modifier = Modifier
+                .padding(top = 124.dp)
+                .fillMaxWidth())
+            {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = sessionName,
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center
+                )
+                SessionSettingsMenu()
+            }
+        }
+    )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ChronicScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
-    Column {
-        RoomTopMenu(
-            navigateToCharactersScreen,
-            navigateToChronicsScreen,
-            navigateToFilesScreen,
-            navigateToParamScreen
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth(),
-            text = sessionName,
-            style = MaterialTheme.typography.headlineSmall,
-            textAlign = TextAlign.Center
-        )
-        Chronics()
-    }
+fun ChronicScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Scaffold (
+        topBar = {
+            RoomTopMenu(
+                navigateToCharactersScreen,
+                navigateToChronicsScreen,
+                navigateToFilesScreen,
+                navigateToParamScreen
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButtonHome(
+                {
+                    navigateToHomeScreen()
+                }
+            )
+        },
+        content = {
+            Surface(modifier = Modifier
+                .padding(top = 124.dp)
+                .fillMaxWidth())
+            {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = sessionName,
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center
+                )
+                Chronics()
+            }
+        }
+    )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CharacterDetailScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
-    Column {
-        RoomTopMenu(
-            navigateToCharactersScreen,
-            navigateToChronicsScreen,
-            navigateToFilesScreen,
-            navigateToParamScreen
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth(),
-            text = sessionName,
-            style = MaterialTheme.typography.headlineSmall,
-            textAlign = TextAlign.Center
-        )
-        Character()
-    }
+fun CharacterDetailScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Scaffold (
+        topBar = {
+            RoomTopMenu(
+                navigateToCharactersScreen,
+                navigateToChronicsScreen,
+                navigateToFilesScreen,
+                navigateToParamScreen
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButtonHome(
+                {
+                    navigateToHomeScreen()
+                }
+            )
+        },
+        content = {
+            Surface(modifier = Modifier
+                .padding(top = 124.dp)
+                .fillMaxWidth())
+            {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = sessionName,
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center
+                )
+                Character()
+            }
+        }
+    )
 }
 
 @Composable
@@ -433,7 +613,24 @@ fun FloatingActionButtonDice(onClick: () -> Unit) {
         onClick = { onClick() },
         modifier = Modifier
     ) {
-        Icon(painter = painterResource(id = R.drawable.dice), "Dice")
+        Column {
+            Icon(painter = painterResource(id = R.drawable.dice), "Dice")
+        }
+    }
+}
+
+@Composable
+fun FloatingActionButtonHome(onClick: () -> Unit) {
+    FloatingActionButton(
+        onClick = { onClick() },
+        modifier = Modifier
+    ) {
+        Column {
+            Icon(
+                Icons.Filled.Home,
+                contentDescription = null
+            )
+        }
     }
 }
 
