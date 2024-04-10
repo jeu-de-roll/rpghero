@@ -4,16 +4,12 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -181,39 +178,24 @@ fun MainNavigation() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+
+    var RollsAmount = remember { mutableStateListOf<Int>(2, 4, 6, 8, 10, 12, 20, 100, 404) }
+    var DiceIndex by remember { mutableIntStateOf(6) }
+
     Scaffold (
         topBar = {
             TopBarMenu(navigateToOpenScreen, navigateToJoinScreen, navigateToCreateScreen, navigateToParamScreen)
         },
         floatingActionButton = {
-            FloatingActionButtonDice()
+            FloatingActionButtonDice(
+                {
+                    DiceIndex++
+                    DiceIndex = DiceIndex % RollsAmount.size
+                }
+            )
         },
         content = {
-            var clicked by remember { mutableStateOf(false) }
-            var dice by remember { mutableIntStateOf(404) }
-            val rand = Random
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .clickable
-                {
-                    dice = rand.nextInt(20) + 1
-                    clicked = true
-                },
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                if (clicked) {
-                    Text(
-                        text = dice.toString(),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-                else {
-                    Text("Tap on Screen to roll for initiative",
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center)
-                }
-            }
+            RollDices(RollsAmount[DiceIndex])
         }
     )
 }
@@ -221,20 +203,33 @@ fun HomeScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Uni
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun RoomScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+
+    var RollsAmount = remember { mutableStateListOf<Int>(2, 4, 6, 8, 10, 12, 20, 100, 404) }
+    var DiceIndex by remember { mutableIntStateOf(6) }
+
     Scaffold (
         topBar = {
             RoomTopMenu(navigateToCharactersScreen, navigateToChronicsScreen, navigateToFilesScreen, navigateToParamScreen)
         },
         floatingActionButton = {
-            FloatingActionButtonDice()
+            FloatingActionButtonDice(
+                {
+                    DiceIndex++
+                    DiceIndex = DiceIndex % RollsAmount.size
+                }
+            )
         },
         content = {
-            Surface(modifier = Modifier.padding(124.dp)) {
+            Surface(modifier = Modifier
+                .padding(top = 124.dp)
+                .fillMaxWidth()) {
                 Text(
                     text = sessionName,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center
                 )
             }
+            RollDices(RollsAmount[DiceIndex])
         }
     )
 }
@@ -310,7 +305,8 @@ fun CharacterScreen(sessionName: String, navigateToCharactersScreen: () -> Unit,
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally),
             text = sessionName,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
         )
         CharacterListMenu(
             characters = arrayOf(
@@ -337,7 +333,8 @@ fun ChronicsScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, 
             modifier = Modifier
                 .fillMaxWidth(),
             text = sessionName,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
         )
         ChronicsListMenu(
             chronics = arrayOf(
@@ -363,7 +360,8 @@ fun FilesScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, nav
             modifier = Modifier
                 .fillMaxWidth(),
             text = sessionName,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
         )
         ShareFilePage()
     }
@@ -382,7 +380,8 @@ fun SessionSettingsScreen(sessionName: String, navigateToCharactersScreen: () ->
             modifier = Modifier
                 .fillMaxWidth(),
             text = sessionName,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
         )
         SessionSettingsMenu()
     }
@@ -401,7 +400,8 @@ fun ChronicScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, n
             modifier = Modifier
                 .fillMaxWidth(),
             text = sessionName,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
         )
         Chronics()
     }
@@ -420,18 +420,47 @@ fun CharacterDetailScreen(sessionName: String, navigateToCharactersScreen: () ->
             modifier = Modifier
                 .fillMaxWidth(),
             text = sessionName,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
         )
         Character()
     }
 }
 
 @Composable
-fun FloatingActionButtonDice() {
+fun FloatingActionButtonDice(onClick: () -> Unit) {
     FloatingActionButton(
-        onClick = { },
+        onClick = { onClick() },
         modifier = Modifier
     ) {
         Icon(painter = painterResource(id = R.drawable.dice), "Dice")
+    }
+}
+
+@Composable
+fun RollDices(RollMaxAmount: Int)
+{
+    var clicked by remember { mutableStateOf(false) }
+    var RollAmount by remember { mutableIntStateOf(404) }
+    val rand = Random
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .clickable
+        {
+            RollAmount = rand.nextInt(RollMaxAmount) + 1
+            clicked = true
+        },
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        if (clicked) {
+            Text("D" + RollMaxAmount.toString(), color = Color.Red)
+            Text(text = RollAmount.toString(), style = MaterialTheme.typography.displayLarge)
+        }
+        else {
+            Text("Tap on Screen to roll for initiative",
+                style = MaterialTheme.typography.displayLarge,
+                textAlign = TextAlign.Center)
+        }
     }
 }
