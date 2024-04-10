@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -34,7 +35,7 @@ fun NamedTextField (name : String, visualTransformation: VisualTransformation)
     ) {
         Text(
             name,
-            fontSize = 28.sp,
+            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
         )
@@ -44,7 +45,8 @@ fun NamedTextField (name : String, visualTransformation: VisualTransformation)
                 .padding(horizontal = 16.dp),
             value = text,
             onValueChange = { text = it },
-            visualTransformation = visualTransformation
+            visualTransformation = visualTransformation,
+            textStyle = MaterialTheme.typography.bodySmall
         )
 
     }
@@ -71,7 +73,7 @@ fun JoinMenu()
         ) {
             Text(
                 text = "JOIN",
-                fontSize = 36.sp
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }
@@ -96,7 +98,7 @@ fun CreateMenu()
         ) {
             Text(
                 text = "CREATE",
-                fontSize = 36.sp
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }

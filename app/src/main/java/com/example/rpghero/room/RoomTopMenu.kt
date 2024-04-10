@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Face
-import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -110,7 +110,7 @@ private fun FilesBox(width: Dp, navigateToFilesScreen: () -> Unit)
             }
     ) {
         Icon(
-            Icons.Rounded.List,
+            Icons.Rounded.FolderOpen,
             contentDescription = "",
             modifier = Modifier
                 .align(Alignment.Center)

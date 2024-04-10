@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,7 +34,7 @@ fun CharacterButton(characterName : String, navigateToSelectedCharacterScreen: (
         ) {
             Text(
                 characterName,
-                fontSize = 36.sp
+                style = MaterialTheme.typography.bodyLarge
             )
             Spacer(Modifier.weight(1f))
         }
