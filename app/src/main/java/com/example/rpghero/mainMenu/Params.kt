@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.example.rpghero.mainMenu.NamedTextField
@@ -15,9 +16,8 @@ import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 
 @Composable
-fun ParamsMenu()
+fun ParamsMenu(navigateToHomeScreen: () -> Unit, connected: Boolean)
 {
-    var connected by remember { mutableStateOf(false) }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -32,7 +32,7 @@ fun ParamsMenu()
         VibrationParam()
         if(connected)
         {
-            ConnectedParams()
+            ConnectedParams(navigateToHomeScreen = navigateToHomeScreen)
         }
         else
         {
@@ -89,9 +89,9 @@ fun VibrationParam()
 }
 
 @Composable
-fun ConnectedParams() {
+fun ConnectedParams(navigateToHomeScreen: () -> Unit) {
+    Divider(modifier = Modifier.padding(bottom = 8.dp))
     Column {
-        Divider(modifier = Modifier.padding(bottom = 8.dp))
         Text(
             "Username : bipboup KakouKakou",
             style = MaterialTheme.typography.bodySmall
@@ -107,11 +107,17 @@ fun ConnectedParams() {
                 .fillMaxWidth()
                 .padding(top = 12.dp)
         ) {
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = { navigateToHomeScreen() }) {
                 Text(
                     "Disconnection",
                     style = MaterialTheme.typography.bodyMedium
                 )
+            }
+        }
+        Spacer(modifier = Modifier.fillMaxSize().weight(1f))
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = { navigateToHomeScreen() }) {
+                Text("Leave Session", style = MaterialTheme.typography.bodyMedium)
             }
         }
     }
