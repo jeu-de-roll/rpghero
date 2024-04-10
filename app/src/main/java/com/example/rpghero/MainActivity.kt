@@ -237,7 +237,7 @@ fun RoomScreen(sessionName: String, navigateToCharactersScreen: () -> Unit, navi
                 .fillMaxWidth()) {
                 Text(
                     text = sessionName,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Center
                 )
             }
@@ -398,7 +398,7 @@ fun CharacterScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navig
                     modifier = Modifier
                         .fillMaxWidth(),
                     text = sessionName,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Center
                 )
                 CharacterListMenu(
@@ -443,7 +443,7 @@ fun ChronicsScreen(sessionName: String, navigateToHomeScreen: () -> Unit, naviga
                     modifier = Modifier
                         .fillMaxWidth(),
                     text = sessionName,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Center
                 )
                 ChronicsListMenu(
@@ -487,7 +487,7 @@ fun FilesScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateT
                     modifier = Modifier
                         .fillMaxWidth(),
                     text = sessionName,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Center
                 )
                 ShareFilePage()
@@ -524,7 +524,7 @@ fun SessionSettingsScreen(sessionName: String, navigateToHomeScreen: () -> Unit,
                     modifier = Modifier
                         .fillMaxWidth(),
                     text = sessionName,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Center
                 )
                 SessionSettingsMenu()
@@ -561,7 +561,7 @@ fun ChronicScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigat
                     modifier = Modifier
                         .fillMaxWidth(),
                     text = sessionName,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Center
                 )
                 Chronics()
@@ -598,7 +598,7 @@ fun CharacterDetailScreen(sessionName: String, navigateToHomeScreen: () -> Unit,
                     modifier = Modifier
                         .fillMaxWidth(),
                     text = sessionName,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Center
                 )
                 Character()
@@ -652,11 +652,11 @@ fun RollDices(RollMaxAmount: Int)
     ){
         if (clicked) {
             Text("D" + RollMaxAmount.toString(), color = Color.Red)
-            Text(text = RollAmount.toString(), style = MaterialTheme.typography.displayLarge)
+            Text(text = RollAmount.toString(), style = MaterialTheme.typography.bodyLarge)
         }
         else {
             Text("Tap on Screen to roll for initiative",
-                style = MaterialTheme.typography.displayLarge,
+                style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center)
         }
     }
