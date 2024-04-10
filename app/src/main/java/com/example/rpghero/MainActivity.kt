@@ -7,9 +7,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.FloatingActionButton
@@ -30,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
@@ -435,7 +439,7 @@ fun ChronicsScreen(sessionName: String, navigateToHomeScreen: () -> Unit, naviga
             )
         },
         content = {
-            Surface(modifier = Modifier
+            Column(modifier = Modifier
                 .padding(top = 124.dp)
                 .fillMaxWidth())
             {
@@ -479,7 +483,7 @@ fun FilesScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateT
             )
         },
         content = {
-            Surface(modifier = Modifier
+            Column(modifier = Modifier
                 .padding(top = 124.dp)
                 .fillMaxWidth())
             {
@@ -516,17 +520,10 @@ fun SessionSettingsScreen(sessionName: String, navigateToHomeScreen: () -> Unit,
             )
         },
         content = {
-            Surface(modifier = Modifier
+            Column(modifier = Modifier
                 .padding(top = 124.dp)
                 .fillMaxWidth())
             {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    text = sessionName,
-                    style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Center
-                )
                 SessionSettingsMenu()
             }
         }
@@ -553,7 +550,7 @@ fun ChronicScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigat
             )
         },
         content = {
-            Surface(modifier = Modifier
+            Column(modifier = Modifier
                 .padding(top = 124.dp)
                 .fillMaxWidth())
             {
@@ -590,7 +587,7 @@ fun CharacterDetailScreen(sessionName: String, navigateToHomeScreen: () -> Unit,
             )
         },
         content = {
-            Surface(modifier = Modifier
+            Column(modifier = Modifier
                 .padding(top = 124.dp)
                 .fillMaxWidth())
             {
@@ -651,7 +648,7 @@ fun RollDices(RollMaxAmount: Int)
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         if (clicked) {
-            Text("D" + RollMaxAmount.toString(), color = Color.Red)
+            Text("D" + RollMaxAmount.toString(), color = Color.Red, style = MaterialTheme.typography.bodyMedium)
             Text(text = RollAmount.toString(), style = MaterialTheme.typography.bodyLarge)
         }
         else {

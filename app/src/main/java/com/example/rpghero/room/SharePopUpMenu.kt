@@ -38,7 +38,8 @@ fun ShareFilePage()
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 16.dp))
+            .padding(16.dp)
+    )
     {
         //BAR
         Text(
@@ -106,11 +107,12 @@ fun File (name : String)
                 {
                     isPopUpOpen.value = !isPopUpOpen.value
                 },
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(width = 32.dp, height = 24.dp)
             ) {
                 Icon(
                     Icons.Filled.MoreHoriz,
-                    contentDescription = null
+                    contentDescription = null,
+                    Modifier.fillMaxSize()
                 )
             }
         }
