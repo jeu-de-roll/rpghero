@@ -156,7 +156,8 @@ fun MainNavigation() {
         composable("SessionSettingsScreen") {
             SessionSettingsScreen(
                 sessionName = "Baldur's Gate 3",
-                navigateToHomeScreen = { navController.navigate("RoomScreen") },
+                navigateToHomeScreen = { navController.navigate("HomeScreen") },
+                navigateToRoomScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
@@ -499,7 +500,7 @@ fun FilesScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateT
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SessionSettingsScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+fun SessionSettingsScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToRoomScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
     Scaffold (
         topBar = {
             RoomTopMenu(
@@ -512,7 +513,7 @@ fun SessionSettingsScreen(sessionName: String, navigateToHomeScreen: () -> Unit,
         floatingActionButton = {
             FloatingActionButtonHome(
                 {
-                    navigateToHomeScreen()
+                    navigateToRoomScreen()
                 }
             )
         },
