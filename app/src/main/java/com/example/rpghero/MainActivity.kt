@@ -1,9 +1,13 @@
 package com.example.rpghero
 
 import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,9 +32,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.activity
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -48,13 +54,15 @@ import com.example.rpghero.room.CharacterListMenu
 import com.example.rpghero.room.Chronics
 import com.example.rpghero.room.ChronicsListMenu
 import com.example.rpghero.room.RoomTopMenu
-import com.example.rpghero.room.SessionSettingsMenu
 import kotlin.random.Random
 
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        applicationContext
 
         setContent {
             RPGHeroTheme {
@@ -64,6 +72,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun MainNavigation() {
     val navController = rememberNavController()
@@ -91,7 +100,7 @@ fun MainNavigation() {
                 navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToOpenScreen = { navController.navigate("OpenScreen") },
                 navigateToCreateScreen = { navController.navigate("CreateScreen") },
-                navigateToParamsScreen = { navController.navigate("ParamScreen") }
+                navigateToParamsScreen = { navController.navigate("ParamScreen") },
             )
         }
         composable("CreateScreen") {
@@ -99,7 +108,8 @@ fun MainNavigation() {
                 navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToOpenScreen = { navController.navigate("OpenScreen") },
                 navigateToJoinScreen = { navController.navigate("JoinScreen") },
-                navigateToParamsScreen = { navController.navigate("ParamScreen") }
+                navigateToParamsScreen = { navController.navigate("ParamScreen") },
+                navigateToRoomScreen = { navController.navigate("RoomScreen") }
             )
         }
         composable("ParamScreen") {
@@ -113,8 +123,10 @@ fun MainNavigation() {
         }
 
         composable("RoomScreen") {
+            val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
+
             RoomScreen(
-                sessionName = "Baldur's Gate 3",
+                sessionName = sharedPref.getString("name", "")!!,
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
@@ -123,7 +135,10 @@ fun MainNavigation() {
         }
 
         composable("CharacterScreen") {
-            CharacterScreen(sessionName = "Baldur's Gate 3",
+            val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
+
+            CharacterScreen(
+                sessionName = sharedPref.getString("name", "")!!,
                 navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
@@ -133,8 +148,10 @@ fun MainNavigation() {
             )
         }
         composable("ChronicsScreen") {
+            val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
+
             ChronicsScreen(
-                sessionName = "Baldur's Gate 3",
+                sessionName = sharedPref.getString("name", "")!!,
                 navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
@@ -144,8 +161,10 @@ fun MainNavigation() {
             )
         }
         composable("FilesScreen") {
+            val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
+
             FilesScreen(
-                sessionName = "Baldur's Gate 3",
+                sessionName = sharedPref.getString("name", "")!!,
                 navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
@@ -154,8 +173,10 @@ fun MainNavigation() {
             )
         }
         composable("SessionSettingsScreen") {
+            val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
+
             SessionSettingsScreen(
-                sessionName = "Baldur's Gate 3",
+                sessionName = sharedPref.getString("name", "")!!,
                 navigateToHomeScreen = { navController.navigate("HomeScreen") },
                 navigateToRoomScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
@@ -166,8 +187,10 @@ fun MainNavigation() {
         }
 
         composable("ChronicScreen") {
+            val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
+
             ChronicScreen(
-                sessionName = "Baldur's Gate 3",
+                sessionName = sharedPref.getString("name", "")!!,
                 navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
@@ -177,8 +200,10 @@ fun MainNavigation() {
         }
 
         composable("CharacterDetailScreen") {
+            val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
+
             CharacterDetailScreen(
-                sessionName = "Baldur's Gate 3",
+                sessionName = sharedPref.getString("name", "")!!,
                 navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
@@ -193,23 +218,21 @@ fun MainNavigation() {
 @Composable
 fun HomeScreen(navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
 
-    var RollsAmount = remember { mutableStateListOf<Int>(2, 4, 6, 8, 10, 12, 20, 100, 404) }
-    var DiceIndex by remember { mutableIntStateOf(6) }
+    val rollsAmount = remember { mutableStateListOf(2, 4, 6, 8, 10, 12, 20, 100, 404) }
+    var diceIndex by remember { mutableIntStateOf(6) }
 
     Scaffold (
         topBar = {
             TopBarMenu(navigateToOpenScreen, navigateToJoinScreen, navigateToCreateScreen, navigateToParamScreen)
         },
         floatingActionButton = {
-            FloatingActionButtonDice(
-                {
-                    DiceIndex++
-                    DiceIndex = DiceIndex % RollsAmount.size
-                }
-            )
+            FloatingActionButtonDice {
+                diceIndex++
+                diceIndex %= rollsAmount.size
+            }
         },
         content = {
-            RollDices(RollsAmount[DiceIndex])
+            RollDices(rollsAmount[diceIndex])
         }
     )
 }
@@ -261,20 +284,15 @@ fun OpenScreen(navigateToHomeScreen: () -> Unit, navigateToRoomScreen: () -> Uni
             )
         },
         floatingActionButton = {
-            FloatingActionButtonHome(
-                {
-                    navigateToHomeScreen()
-                }
-            )
+            FloatingActionButtonHome {
+                navigateToHomeScreen()
+            }
         },
         content = {
             Surface(modifier = Modifier
                 .padding(top = 124.dp)
                 .fillMaxWidth()) {
                 SessionListMenu(
-                    sessions = arrayOf(
-                        "Baldur's Gate 3",
-                    ),
                     navigateToRoomScreen = navigateToRoomScreen,
                 )
             }
@@ -295,11 +313,9 @@ fun JoinScreen(navigateToHomeScreen: () -> Unit, navigateToOpenScreen: () -> Uni
             )
         },
         floatingActionButton = {
-            FloatingActionButtonHome(
-                {
-                    navigateToHomeScreen()
-                }
-            )
+            FloatingActionButtonHome {
+                navigateToHomeScreen()
+            }
         },
         content = {
             Surface(modifier = Modifier
@@ -312,9 +328,10 @@ fun JoinScreen(navigateToHomeScreen: () -> Unit, navigateToOpenScreen: () -> Uni
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CreateScreen(navigateToHomeScreen: () -> Unit, navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToParamsScreen: () -> Unit) {
+fun CreateScreen(navigateToHomeScreen: () -> Unit, navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToParamsScreen: () -> Unit, navigateToRoomScreen: () -> Unit) {
     Scaffold (
         topBar = {
             TopBarMenu(
@@ -325,23 +342,22 @@ fun CreateScreen(navigateToHomeScreen: () -> Unit, navigateToOpenScreen: () -> U
             )
         },
         floatingActionButton = {
-            FloatingActionButtonHome(
-                {
-                    navigateToHomeScreen()
-                }
-            )
+            FloatingActionButtonHome {
+                navigateToHomeScreen()
+            }
         },
         content = {
             Surface(modifier = Modifier
                 .padding(top = 124.dp)
                 .fillMaxWidth())
             {
-                CreateMenu()
+                CreateMenu(navigateToRoomScreen)
             }
         }
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ParamsScreen(navigateToHomeScreen: () -> Unit, navigateToDiceScreen: () -> Unit, navigateToOpenScreen: () -> Unit, navigateToJoinScreen: () -> Unit, navigateToCreateScreen: () -> Unit) {
@@ -355,11 +371,9 @@ fun ParamsScreen(navigateToHomeScreen: () -> Unit, navigateToDiceScreen: () -> U
             )
         },
         floatingActionButton = {
-            FloatingActionButtonHome(
-                {
-                    navigateToDiceScreen()
-                }
-            )
+            FloatingActionButtonHome {
+                navigateToDiceScreen()
+            }
         },
         content = {
             Surface(modifier = Modifier
@@ -385,11 +399,9 @@ fun CharacterScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navig
             )
         },
         floatingActionButton = {
-            FloatingActionButtonHome(
-                {
-                    navigateToHomeScreen()
-                }
-            )
+            FloatingActionButtonHome {
+                navigateToHomeScreen()
+            }
         },
         content = {
             Surface(modifier = Modifier
@@ -408,7 +420,7 @@ fun CharacterScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navig
                         "Tav",
                         "Astarion",
                         "Lae'zel",
-                        "Shadowheart",
+                        "Shadowheart"
                     ),
                     navigateToSelectedCharacterScreen
                 )
@@ -430,11 +442,9 @@ fun ChronicsScreen(sessionName: String, navigateToHomeScreen: () -> Unit, naviga
             )
         },
         floatingActionButton = {
-            FloatingActionButtonHome(
-                {
-                    navigateToHomeScreen()
-                }
-            )
+            FloatingActionButtonHome {
+                navigateToHomeScreen()
+            }
         },
         content = {
             Column(modifier = Modifier
@@ -474,11 +484,9 @@ fun FilesScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateT
             )
         },
         floatingActionButton = {
-            FloatingActionButtonHome(
-                {
-                    navigateToHomeScreen()
-                }
-            )
+            FloatingActionButtonHome {
+                navigateToHomeScreen()
+            }
         },
         content = {
             Column(modifier = Modifier
@@ -511,11 +519,9 @@ fun SessionSettingsScreen(sessionName: String, navigateToHomeScreen: () -> Unit,
             )
         },
         floatingActionButton = {
-            FloatingActionButtonHome(
-                {
-                    navigateToRoomScreen()
-                }
-            )
+            FloatingActionButtonHome {
+                navigateToRoomScreen()
+            }
         },
         content = {
             Column(modifier = Modifier
@@ -541,11 +547,9 @@ fun ChronicScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigat
             )
         },
         floatingActionButton = {
-            FloatingActionButtonHome(
-                {
-                    navigateToHomeScreen()
-                }
-            )
+            FloatingActionButtonHome {
+                navigateToHomeScreen()
+            }
         },
         content = {
             Column(modifier = Modifier
@@ -578,11 +582,9 @@ fun CharacterDetailScreen(sessionName: String, navigateToHomeScreen: () -> Unit,
             )
         },
         floatingActionButton = {
-            FloatingActionButtonHome(
-                {
-                    navigateToHomeScreen()
-                }
-            )
+            FloatingActionButtonHome {
+                navigateToHomeScreen()
+            }
         },
         content = {
             Column(modifier = Modifier
@@ -646,7 +648,7 @@ fun RollDices(RollMaxAmount: Int)
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         if (clicked) {
-            Text("D" + RollMaxAmount.toString(), color = Color.Red, style = MaterialTheme.typography.bodyMedium)
+            Text("d$RollMaxAmount", color = Color.Red, style = MaterialTheme.typography.bodyMedium)
             Text(text = RollAmount.toString(), style = MaterialTheme.typography.bodyLarge)
         }
         else {

@@ -1,5 +1,6 @@
 package com.example.rpghero.mainMenu
 
+import android.content.Context
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -15,14 +16,37 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.request.url
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import kotlinx.coroutines.runBlocking
+import org.json.JSONArray
+import org.json.JSONObject
 
 @Composable
 fun SessionButton(sessionName : String, navigateToRoomScreen: () -> Unit) {
+    val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
+
     Button(
-        onClick = { navigateToRoomScreen() },
+        onClick = {
+            with (sharedPref.edit()) {
+                putString("name", sessionName)
+                apply()
+            }
+            navigateToRoomScreen()
+                  },
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .fillMaxWidth()
@@ -41,14 +65,35 @@ fun SessionButton(sessionName : String, navigateToRoomScreen: () -> Unit) {
 }
 
 @Composable
-fun SessionListMenu(sessions: Array<String>, navigateToRoomScreen: () -> Unit) {
+fun SessionListMenu(navigateToRoomScreen: () -> Unit) {
+    var sessions: JSONArray
+
+    runBlocking {
+        val client = HttpClient(CIO)
+        val request = HttpRequestBuilder()
+
+        request.url("http://192.168.1.134:3000/api/games/")
+
+        val response: HttpResponse =
+            client.get(request)
+
+        sessions = JSONArray(response.bodyAsText())
+    }
+
+    var sessionNames = arrayOf<String>()
+
+    for (i in 0 until sessions.length()) {
+        val session = sessions.getJSONObject(i)
+        sessionNames += session.getString("name")
+    }
+
     LazyColumn (
         modifier = Modifier
             .fillMaxHeight()
             .padding(vertical = 32.dp)
     )
     {
-        items(sessions) { session ->
+        items(sessionNames) { session ->
             Spacer(modifier = Modifier.height(8.dp))
             SessionButton(sessionName = session, navigateToRoomScreen = navigateToRoomScreen)
             Spacer(modifier = Modifier.height(8.dp))

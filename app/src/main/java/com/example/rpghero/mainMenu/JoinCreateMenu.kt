@@ -1,5 +1,11 @@
 package com.example.rpghero.mainMenu
 
+import android.app.Application
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.os.Build
+import android.util.JsonWriter
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -15,13 +22,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.request.url
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import kotlinx.coroutines.runBlocking
+import org.json.JSONObject
+import java.lang.Exception
+import java.net.URL
+import kotlin.concurrent.thread
 
 @Composable
 fun NamedTextField (name : String, visualTransformation: VisualTransformation)
@@ -79,19 +106,47 @@ fun JoinMenu()
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun CreateMenu()
+fun CreateMenu(navigateToRoomScreen: () -> Unit)
 {
+    val context = LocalContext.current
+
+    var description by rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("") }
+
     Column (
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.Center
     ){
-        NamedTextField(name = "Name", VisualTransformation.None)
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Enter name") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            singleLine = true,
+        )
         Spacer(modifier = Modifier.height(16.dp))
-        NamedTextField(name = "Password", PasswordVisualTransformation())
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
+            value = description,
+            onValueChange = { description = it },
+            label = { Text("Enter description") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            singleLine = true,
+        )
         Spacer(modifier = Modifier.height(32.dp))
         Button(
-            onClick = {  },
+            onClick = {
+                var created = CreateRoom(context, name, description)
+                if (created)
+                    navigateToRoomScreen()
+                      },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp)
@@ -104,14 +159,41 @@ fun CreateMenu()
     }
 }
 
-@Preview
-@Composable
-fun PreviewJoin() {
-    //JoinMenu()
-}
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+fun CreateRoom(context: Context, name: String, description: String): Boolean {
+    var created = false
 
-@Preview
-@Composable
-fun PreviewCreate() {
-    CreateMenu()
+    if (name.isNullOrEmpty() or description.isNullOrEmpty())
+        return created
+
+    runBlocking {
+        val client = HttpClient(CIO)
+        val request = HttpRequestBuilder()
+
+        request.contentType(ContentType.Application.Json)
+        val json = JSONObject()
+            .put("name", name)
+            .put("description", description)
+            .put("master", "6627c7f51f020a760685a6ac")
+            .put("player", "[]")
+            .put("blankSheet", "")
+            .toString()
+
+        request.setBody(json)
+        request.url("http://192.168.1.134:3000/api/games/")
+
+        val response: HttpResponse =
+            client.post(request)
+
+        created = true
+    }
+
+    val sharedPref = context.getSharedPreferences("currentRoom", MODE_PRIVATE)
+
+    with (sharedPref.edit()) {
+        putString("name", name)
+        apply()
+    }
+
+    return created
 }

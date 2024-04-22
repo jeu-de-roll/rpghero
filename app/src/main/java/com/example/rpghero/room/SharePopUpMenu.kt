@@ -1,5 +1,6 @@
 package com.example.rpghero.room
 
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.*
 import com.example.rpghero.R
+import java.io.File
 
 @Preview
 @Composable
@@ -75,51 +77,6 @@ fun FilesGrid (files : Array<String>)
         {
                 file -> File(file)
         }
-    }
-}
-
-@Composable
-fun File (name : String)
-{
-    val isPopUpOpen = remember { mutableStateOf(false) }
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(painter = painterResource(id = R.drawable.placeholder),
-            contentDescription = null)
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text(
-                text = name,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            )
-            IconButton(
-                onClick =
-                {
-                    isPopUpOpen.value = !isPopUpOpen.value
-                },
-                modifier = Modifier.size(width = 32.dp, height = 24.dp)
-            ) {
-                Icon(
-                    Icons.Filled.MoreHoriz,
-                    contentDescription = null,
-                    Modifier.fillMaxSize()
-                )
-            }
-        }
-    }
-    if (isPopUpOpen.value)
-    {
-        SharePopup(onClose = { isPopUpOpen.value = false })
     }
 }
 

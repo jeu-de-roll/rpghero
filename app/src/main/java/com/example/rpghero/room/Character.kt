@@ -1,19 +1,27 @@
 package com.example.rpghero.room
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.TextField
+import android.content.Context
+import android.content.res.AssetManager
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import com.example.rpghero.R
+import com.rajat.pdfviewer.compose.PdfRendererViewCompose
+import java.io.File
 
 @Composable
 fun Character () {
-    Image(
-        painter = painterResource(id = R.drawable.character_sheet_dnd),
-        contentDescription = null,
-        modifier = Modifier.fillMaxSize()
+    val am: AssetManager = LocalContext.current.applicationContext.assets
+
+    val file: File = createTempFile()
+
+    am.open("dnd_5e.pdf").copyTo(file.outputStream())
+
+    PdfRendererViewCompose(
+        file = file,
+        lifecycleOwner = LocalLifecycleOwner.current,
     )
 }

@@ -69,4 +69,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation("androidx.compose.material:material-icons-extended-android:1.6.5")
+    implementation("io.ktor:ktor-client-core:2.3.10")
+    implementation("io.ktor:ktor-client-cio:2.3.10")
+
+    implementation("io.github.afreakyelf:Pdf-Viewer:2.1.1")
 }

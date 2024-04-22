@@ -1,6 +1,11 @@
 package com.example.rpghero.mainMenu
 
+import android.content.Context
+import android.os.Build
+import android.preference.PreferenceManager
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -8,13 +13,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.example.rpghero.mainMenu.NamedTextField
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.request.url
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
+import kotlinx.coroutines.runBlocking
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import org.json.JSONObject
+import java.util.prefs.Preferences
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun ParamsMenu(navigateToHomeScreen: () -> Unit, connected: Boolean)
 {
@@ -36,7 +58,7 @@ fun ParamsMenu(navigateToHomeScreen: () -> Unit, connected: Boolean)
         }
         else
         {
-            DisconnectedParams()
+            DisconnectedParams(navigateToHomeScreen = navigateToHomeScreen)
         }
     }
 }
@@ -123,9 +145,13 @@ fun ConnectedParams(navigateToHomeScreen: () -> Unit) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun DisconnectedParams()
+fun DisconnectedParams(navigateToHomeScreen: () -> Unit)
 {
+    var password by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+
     Divider(modifier = Modifier.padding(bottom = 8.dp))
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -133,10 +159,36 @@ fun DisconnectedParams()
             .fillMaxWidth()
             .padding(top = 12.dp))
     {
-        NamedTextField(name = "Username or Email", visualTransformation = VisualTransformation.None)
-        NamedTextField(name = "Password", visualTransformation = PasswordVisualTransformation())
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            singleLine = true,
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Password") },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            singleLine = true,
+        )
         Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = { /*TODO*/ }) {
+        Button(
+            onClick = {
+                val created = CreateOrGetUser(email, password)
+                if (created)
+                    navigateToHomeScreen()
+            }
+        ) {
             Text(
                 "Connection",
                 style = MaterialTheme.typography.bodyMedium
@@ -150,4 +202,34 @@ fun DisconnectedParams()
             )
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+fun CreateOrGetUser(email: String, password: String): Boolean {
+    var created = false
+
+    runBlocking {
+        val client = HttpClient(CIO)
+        val request = HttpRequestBuilder()
+
+        request.contentType(ContentType.Application.Json)
+        val json = JSONObject()
+            .put("email", email)
+            .put("password", password)
+            .put("username", email.split("@")[0])
+            .toString()
+
+        request.setBody(json)
+        request.url("http://192.168.1.134:3000/api/users/")
+
+        val response: HttpResponse =
+            client.post(request)
+
+        if (response.status == HttpStatusCode.Created)
+            created = true
+
+
+    }
+
+    return created
 }
