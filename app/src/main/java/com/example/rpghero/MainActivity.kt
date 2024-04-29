@@ -455,6 +455,7 @@ fun CharacterScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navig
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ChronicsScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit, navigateToSelectedChronicScreen: () -> Unit) {
@@ -473,7 +474,7 @@ fun ChronicsScreen(sessionName: String, navigateToHomeScreen: () -> Unit, naviga
             }
         },
         content = {
-            Column(modifier = Modifier
+            Surface(modifier = Modifier
                 .padding(top = 124.dp)
                 .fillMaxWidth())
             {
@@ -484,14 +485,15 @@ fun ChronicsScreen(sessionName: String, navigateToHomeScreen: () -> Unit, naviga
                     style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Center
                 )
-                ChronicsListMenu(
-                    chronics = arrayOf(
-                        "Act 1",
-                        "Act 2",
-                        "Act 3",
-                    ),
-                    navigateToSelectedChronicScreen
-                )
+                Row (
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(vertical = 32.dp)
+                ) {
+                    ChronicsListMenu(
+                        navigateToSelectedChronicScreen
+                    )
+                }
             }
         }
     )

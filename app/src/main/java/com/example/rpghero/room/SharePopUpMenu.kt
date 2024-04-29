@@ -1,6 +1,8 @@
 package com.example.rpghero.room
 
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,6 +38,11 @@ import java.io.File
 @Composable
 fun ShareFilePage()
 {
+    val result = remember { mutableStateOf<Uri?>(null) }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {
+        result.value = it
+    }
+
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -52,10 +59,9 @@ fun ShareFilePage()
             modifier = Modifier
             .weight(1f)
             .padding(vertical = 16.dp)){
-            FilesGrid(arrayOf("Image 1", "Ma carte.pdf", "Pnj artwork", "Mp3 404", "Meme trop marrant", "Machin", "Chose", "Machin", "Chose", "Machin", "Chose", "Machin", "Chose", "Machin", "Chose"))
-            //Slider(value = , onValueChange = )
+            FilesGrid(arrayOf())
         }
-        Button(onClick = { /*TODO*/ })
+        Button(onClick = { launcher.launch(arrayOf("application/pdf")) })
         {
             Text(
                 "Import File",
