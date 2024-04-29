@@ -36,13 +36,22 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 @Composable
-fun SessionButton(sessionName : String, navigateToRoomScreen: () -> Unit) {
+fun SessionButton(sessionName : String, navigateToRoomScreen: () -> Unit, sessions: JSONArray) {
     val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
+
+    var gameId = ""
+
+    for (i in 0 until sessions.length()) {
+        val session = sessions.getJSONObject(i)
+        if (session.get("name") == sessionName)
+            gameId = session.get("_id").toString()
+    }
 
     Button(
         onClick = {
             with (sharedPref.edit()) {
-                putString("name", sessionName)
+                putString("gameName", sessionName)
+                putString("gameId", gameId)
                 apply()
             }
             navigateToRoomScreen()
@@ -72,7 +81,7 @@ fun SessionListMenu(navigateToRoomScreen: () -> Unit) {
         val client = HttpClient(CIO)
         val request = HttpRequestBuilder()
 
-        request.url("http://192.168.1.134:3000/api/games/")
+        request.url("http://10.0.2.2:3000/api/games/") // localhost refer to the Android emulator here. We need the host machine where the web server is, so we use the special IP alias 10.0.2.2 to host loopback interface
 
         val response: HttpResponse =
             client.get(request)
@@ -95,7 +104,7 @@ fun SessionListMenu(navigateToRoomScreen: () -> Unit) {
     {
         items(sessionNames) { session ->
             Spacer(modifier = Modifier.height(8.dp))
-            SessionButton(sessionName = session, navigateToRoomScreen = navigateToRoomScreen)
+            SessionButton(sessionName = session, navigateToRoomScreen = navigateToRoomScreen, sessions = sessions)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }

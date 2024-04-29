@@ -220,15 +220,13 @@ fun CreateOrGetUser(email: String, password: String): Boolean {
             .toString()
 
         request.setBody(json)
-        request.url("http://192.168.1.134:3000/api/users/")
+        request.url("http://10.0.2.2:3000/api/users/")
 
         val response: HttpResponse =
             client.post(request)
 
         if (response.status == HttpStatusCode.Created)
             created = true
-
-
     }
 
     return created

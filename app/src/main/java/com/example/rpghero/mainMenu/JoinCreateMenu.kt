@@ -161,6 +161,11 @@ fun CreateMenu(navigateToRoomScreen: () -> Unit)
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun CreateRoom(context: Context, name: String, description: String): Boolean {
+    var response: HttpResponse
+
+    var gameId = ""
+    var gameName = ""
+
     var created = false
 
     if (name.isNullOrEmpty() or description.isNullOrEmpty())
@@ -180,10 +185,12 @@ fun CreateRoom(context: Context, name: String, description: String): Boolean {
             .toString()
 
         request.setBody(json)
-        request.url("http://192.168.1.134:3000/api/games/")
+        request.url("http://10.0.2.2:3000/api/games/")
 
-        val response: HttpResponse =
-            client.post(request)
+        response = client.post(request)
+
+        gameId = JSONObject(response.bodyAsText()).get("_id").toString()
+        gameName = JSONObject(response.bodyAsText()).get("name").toString()
 
         created = true
     }
@@ -191,7 +198,8 @@ fun CreateRoom(context: Context, name: String, description: String): Boolean {
     val sharedPref = context.getSharedPreferences("currentRoom", MODE_PRIVATE)
 
     with (sharedPref.edit()) {
-        putString("name", name)
+        putString("gameName", gameName)
+        putString("gameId", gameId)
         apply()
     }
 

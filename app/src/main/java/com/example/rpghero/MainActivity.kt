@@ -11,11 +11,17 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.activity
@@ -53,12 +60,14 @@ import com.example.rpghero.room.ShareFilePage
 import com.example.rpghero.room.CharacterListMenu
 import com.example.rpghero.room.Chronics
 import com.example.rpghero.room.ChronicsListMenu
+import com.example.rpghero.room.CreateCharacterMenu
 import com.example.rpghero.room.RoomTopMenu
 import kotlin.random.Random
 
 
 class MainActivity : ComponentActivity() {
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -126,7 +135,7 @@ fun MainNavigation() {
             val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
 
             RoomScreen(
-                sessionName = sharedPref.getString("name", "")!!,
+                sessionName = sharedPref.getString("gameName", "")!!,
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
@@ -138,20 +147,21 @@ fun MainNavigation() {
             val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
 
             CharacterScreen(
-                sessionName = sharedPref.getString("name", "")!!,
+                sessionName = sharedPref.getString("gameName", "")!!,
                 navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
                 navigateToParamScreen = { navController.navigate("SessionSettingsScreen") },
-                navigateToSelectedCharacterScreen = { navController.navigate("CharacterDetailScreen") }
+                navigateToSelectedCharacterScreen = { navController.navigate("CharacterDetailScreen") },
+                navigateToCharacterCreationScreen = { navController.navigate("CharacterCreationScreen") }
             )
         }
         composable("ChronicsScreen") {
             val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
 
             ChronicsScreen(
-                sessionName = sharedPref.getString("name", "")!!,
+                sessionName = sharedPref.getString("gameName", "")!!,
                 navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
@@ -164,7 +174,7 @@ fun MainNavigation() {
             val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
 
             FilesScreen(
-                sessionName = sharedPref.getString("name", "")!!,
+                sessionName = sharedPref.getString("gameName", "")!!,
                 navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
@@ -176,7 +186,7 @@ fun MainNavigation() {
             val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
 
             SessionSettingsScreen(
-                sessionName = sharedPref.getString("name", "")!!,
+                sessionName = sharedPref.getString("gameName", "")!!,
                 navigateToHomeScreen = { navController.navigate("HomeScreen") },
                 navigateToRoomScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
@@ -190,7 +200,7 @@ fun MainNavigation() {
             val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
 
             ChronicScreen(
-                sessionName = sharedPref.getString("name", "")!!,
+                sessionName = sharedPref.getString("gameName", "")!!,
                 navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
@@ -203,12 +213,27 @@ fun MainNavigation() {
             val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
 
             CharacterDetailScreen(
-                sessionName = sharedPref.getString("name", "")!!,
+                character = sharedPref.getString("characterName", "")!!,
+                sessionName = sharedPref.getString("gameName", "")!!,
                 navigateToHomeScreen = { navController.navigate("RoomScreen") },
                 navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
                 navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
                 navigateToFilesScreen = { navController.navigate("FilesScreen") },
                 navigateToParamScreen = { navController.navigate("SessionSettingsScreen") }
+            )
+        }
+
+        composable("CharacterCreationScreen") {
+            val sharedPref = LocalContext.current.getSharedPreferences("currentRoom", Context.MODE_PRIVATE)
+
+            CharacterCreationScreen(
+                sessionName = sharedPref.getString("gameName", "")!!,
+                navigateToHomeScreen = { navController.navigate("RoomScreen") },
+                navigateToCharactersScreen = { navController.navigate("CharacterScreen") },
+                navigateToChronicsScreen = { navController.navigate("ChronicsScreen") },
+                navigateToFilesScreen = { navController.navigate("FilesScreen") },
+                navigateToParamScreen = { navController.navigate("SessionSettingsScreen") },
+                navigateToSelectedCharacterScreen = { navController.navigate("CharacterDetailScreen") }
             )
         }
     }
@@ -388,7 +413,7 @@ fun ParamsScreen(navigateToHomeScreen: () -> Unit, navigateToDiceScreen: () -> U
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CharacterScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit, navigateToSelectedCharacterScreen: () -> Unit) {
+fun CharacterScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit, navigateToSelectedCharacterScreen: () -> Unit, navigateToCharacterCreationScreen: () -> Unit) {
     Scaffold (
         topBar = {
             RoomTopMenu(
@@ -415,15 +440,16 @@ fun CharacterScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navig
                     style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Center
                 )
-                CharacterListMenu(
-                    characters = arrayOf(
-                        "Tav",
-                        "Astarion",
-                        "Lae'zel",
-                        "Shadowheart"
-                    ),
-                    navigateToSelectedCharacterScreen
-                )
+                Row (
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(vertical = 32.dp)
+                ) {
+                    CharacterListMenu(
+                        navigateToSelectedCharacterScreen=navigateToSelectedCharacterScreen,
+                        navigateToCharacterCreationScreen=navigateToCharacterCreationScreen
+                    )
+                }
             }
         }
     )
@@ -506,6 +532,7 @@ fun FilesScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateT
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SessionSettingsScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToRoomScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
@@ -571,7 +598,43 @@ fun ChronicScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigat
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CharacterDetailScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+fun CharacterDetailScreen(sessionName: String, character: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit) {
+    Scaffold (
+        topBar = {
+            RoomTopMenu(
+                navigateToCharactersScreen,
+                navigateToChronicsScreen,
+                navigateToFilesScreen,
+                navigateToParamScreen
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButtonHome {
+                navigateToHomeScreen()
+            }
+        },
+        content = {
+            Column(modifier = Modifier
+                .padding(top = 124.dp)
+                .fillMaxWidth())
+            {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = "$sessionName - $character",
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center
+                )
+                Character()
+            }
+        }
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun CharacterCreationScreen(sessionName: String, navigateToHomeScreen: () -> Unit, navigateToCharactersScreen: () -> Unit, navigateToChronicsScreen: () -> Unit, navigateToFilesScreen: () -> Unit, navigateToParamScreen: () -> Unit, navigateToSelectedCharacterScreen: () -> Unit) {
     Scaffold (
         topBar = {
             RoomTopMenu(
@@ -598,7 +661,9 @@ fun CharacterDetailScreen(sessionName: String, navigateToHomeScreen: () -> Unit,
                     style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Center
                 )
-                Character()
+                CreateCharacterMenu(
+                    navigateToSelectedCharacterScreen
+                )
             }
         }
     )
